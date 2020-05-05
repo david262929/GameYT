@@ -7,18 +7,42 @@ function createField(size) {
     const cells = pointsArr.map(function (point) {
         const cell = document.createElement("div");
         cell.classList.add("cell");
-        cell.style.left = point.x + "em";
-        cell.style.top = point.y + "em";
-        cell.dataset.x =point.x;
-        cell.dataset.y =point.y;
-        cell.setAttribute('id', `pos_${point.x}x${point.y}`);
-        cell.classList.add(`pic${Math.floor(Math.random() * 6 + 1)}`)
+        // cell.setAttribute('id', `pos_${point.x}x${point.y}`);
+        // cell.classList.add(`pic${Math.floor(Math.random() * 6 + 1)}`)
         cell.point = point;
-        //  cell.classList.add("pic3")
-        return cell;
+        var inner = document.createElement("div");
+        cell.appendChild(inner);
+        var cellObj = {
+            element:cell,
+            getPic:function(){
+                return +inner.dataset.picId;
+            },
+            setPic:function(id){
+                inner.className = `pic${id}`;
+                inner.dataset.picId = id;
+            },
+            getX : function () {
+                return +cell.dataset.x
+            },
+            getY : function () {
+                return +cell.dataset.y
+            },
+            setX : function (x) {
+                cell.dataset.x = x;
+                cell.style.left = x + "em";
+            },
+            setY : function (y) {
+                cell.dataset.y = y;
+                cell.style.top = y + "em";
+            }
+        }
+        cellObj.setX(point.x)
+        cellObj.setY(point.y)
+        return cellObj;
     })
+
     cells.forEach(function (cell) {
-        field.appendChild(cell)
+        field.appendChild(cell.element)
     })
     return {
         element: field,
@@ -26,3 +50,7 @@ function createField(size) {
     }
 }
 
+function createRandomPic(cell){
+    let picId =Math.floor(Math.random() * 6 +1);
+    cell.setPic(picId)
+}

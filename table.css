@@ -10,7 +10,7 @@ body{
     width: 100%;
     height: 100%;
 }
-.cell{
+.cell {
     display: flex;
     position: absolute;
     width: 1em;
@@ -18,22 +18,25 @@ body{
     align-items: center;
     justify-content: center;
     border-radius: 30%;
-    background-color: gray;
     overflow: hidden;
     cursor: pointer;
+    transition: all 500ms;
 }
 .cell:hover{
-    opacity: 0.8;
+    opacity: 0.75;
 }
 .field{
     display: flex;
     position: relative;
-    font-size: 60px;
-    width: 8em;
-    height: 8em;
+    font-size: 85px;
+    width: 7em;
+    height: 7em;
     justify-content: center;
     align-items: center;
     border-radius: 2%;
+    background-image: url("7x7.png");
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 .gameArea{
     display: flex;
@@ -46,42 +49,77 @@ body{
     background-size: cover;
 }
 .active{
-    border: 1px greenyellow;
+    border: 1px solid greenyellow;
 }
+.boom{
+    background-image: inherit;
+}
+
 .pic1{
+    width: 100%;
+    height: 100%;
     background-image: url("01.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    animation: pic 1s linear;
 }
 .pic2{
+    width: 100%;
+    height: 100%;
     background-image: url("02.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    animation: pic 1s linear;
+    transition: all 500ms;
 }
 .pic3{
+    width: 100%;
+    height: 100%;
     display: flex;
     background-position: center;
     background-image: url("03.png");
     background-size: contain;
     background-repeat: no-repeat;
+    animation: pic 1s linear;
+    transition: all 500ms;
 }
 .pic4{
+    width: 100%;
+    height: 100%;
     background-image: url("04.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    animation: pic 1s linear;
+    transition: all 500ms;
 }
 .pic5{
+    width: 100%;
+    height: 100%;
     background-image: url("05.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    animation: pic 1s linear;
+    transition: all 500ms;
 }
 .pic6{
+    width: 100%;
+    height: 100%;
     background-image: url("06.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    animation: pic 1s linear;
+    transition: all 500ms;
+}
+@keyframes pic {
+    0%{
+        transform: translate(0,-10em);
+    }
+    100%{
+        transform: translate(0,0);
+    }
 }
