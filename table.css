@@ -25,6 +25,9 @@ body{
 .cell:hover{
     opacity: 0.75;
 }
+.cell.suchka{
+    background-color: beige;
+}
 .field{
     display: flex;
     position: relative;

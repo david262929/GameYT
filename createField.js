@@ -46,10 +46,6 @@ function createField(size) {
         field_element,
         cells,
         getSuchka : (x, y, distance = 1) => {
-            if(x && y){
-                console.log(x,y);
-                return;
-            }
             const current_cell = cells[`x${x}-y${y}`];
             if(!current_cell){
                 return [];
@@ -63,7 +59,8 @@ function createField(size) {
                         if(!result['top']){
                             result['top'] = [];
                         }
-                        result['top'].push(top_cell)
+                        result['top'].push(top_cell);
+                        top_cell.element.classList.add('suchka');
                     }
 
                     const bottom_cell = cells[`x${x}-y${y+i}`];
@@ -71,7 +68,8 @@ function createField(size) {
                         if(!result['bottom']){
                             result['bottom'] = [];
                         }
-                        result['bottom'].push(bottom_cell)
+                        result['bottom'].push(bottom_cell);
+                        bottom_cell.element.classList.add('suchka');
                     }
                 }
                 if(x >= 0 && x <= size.width){
@@ -80,7 +78,8 @@ function createField(size) {
                         if(!result['left']){
                             result['left'] = [];
                         }
-                        result['left'].push(left_cell)
+                        result['left'].push(left_cell);
+                        left_cell.element.classList.add('suchka');
                     }
 
                     const right_cell = cells[`x${x+i}-y${y}`];
@@ -88,7 +87,8 @@ function createField(size) {
                         if(!result['right']){
                             result['right'] = [];
                         }
-                        result['right'].push(right_cell)
+                        result['right'].push(right_cell);
+                        right_cell.element.classList.add('suchka');
                     }
                 }
             }

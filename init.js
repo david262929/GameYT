@@ -1,6 +1,6 @@
 const size = {width: 7, height: 7};
 const {field_element, cells, getSuchka} = createField(size);
-console.log(getSuchka(0, 0));
+console.log(getSuchka(3, 3, 2));
 const gameArea = document.createElement("div");
 // const info = document.createElement("div");
 // const time = document.createElement("div");
