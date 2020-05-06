@@ -1,9 +1,118 @@
+
+
 function createField(size) {
 
     const field_element = document.createElement("div");
     field_element.classList.add("field");
     const pointsArr = generateMatrix(size);
     const cells = [];
+
+    const getKey = (x, y) => {
+        return `x${x}_y${y}`;
+    };
+
+    const getSuchka = (x, y, distance = 1, mode = '') => {
+        const current_cell = cells[getKey( x, y )];
+        if(!current_cell){
+            return [];
+        }
+        const result = [];
+        for(let i = 1; i < distance + 1; i++) {
+            if(i > size.width && i > size.height ){
+                distance = 0;
+            }
+
+            let top_cell = cells[getKey(x,y - i)];
+            if(top_cell){
+                if(!result['top']){
+                    result['top'] = [];
+                }
+                if(mode === 'only-types'){
+                    top_cell = top_cell.getPic();
+                }
+                result['top'].push(top_cell);
+            }
+
+            let bottom_cell = cells[getKey(x,y + i)];
+            if(bottom_cell){
+                if(!result['bottom']){
+                    result['bottom'] = [];
+                }
+                if(mode === 'only-types'){
+                    bottom_cell = bottom_cell.getPic();
+                }
+                result['bottom'].push(bottom_cell);
+            }
+            let left_cell = cells[getKey(x - i,y )];
+            if(left_cell){
+                if(!result['left']){
+                    result['left'] = [];
+                }
+                if(mode === 'only-types'){
+                    left_cell = left_cell.getPic();
+                }
+                result['left'].push(left_cell);
+            }
+
+            let right_cell = cells[getKey(x + i,y)];
+            if(right_cell){
+                if(!result['right']){
+                    result['right'] = [];
+                }
+                if(mode === 'only-types'){
+                    right_cell = right_cell.getPic();
+                }
+                result['right'].push(right_cell);
+            }
+        }
+
+        return result;
+    };
+
+
+
+    const createRandomPic = (cell) => {
+        const nearbyCells = getSuchka(cell.getX(), cell.getY(), 2, 'only-types');
+
+        const generatePicId = () =>  Math.floor(Math.random() * 6 +1);
+        let picId = generatePicId();
+        // if(cell.getX()  == 3 && cell.getY() == 3){
+        //     const excludeList = [];
+        //
+        //     const nearsDistanceOne = [];
+        //
+        //     let loop = true;
+        //     while(loop){
+        //         Object.keys(nearbyCells).forEach( (key) => {
+        //
+        //             let equal = true;
+        //             let type;
+        //             console.log(nearbyCells[key]);
+        //             nearbyCells[key].forEach((_type) => {
+        //                 if(!equal){
+        //                     return;
+        //                 }
+        //                 if(type !== picId){
+        //                     type = _type;
+        //                     equal = false;
+        //                 }
+        //             });
+        //             if(equal){
+        //                 excludeList.push(type);
+        //                 let picId = generatePicId();
+        //             }
+        //         });
+        //         loop = false;
+        //
+        //         // if(nearbyCells['bottom'].){
+        //         //
+        //         // }
+        //     }
+        //     console.log(excludeList);
+        // }
+        return cell.setPic(picId)
+    };
+
     pointsArr.forEach(function (point) {
         const cell = document.createElement("div");
         cell.classList.add("cell");
@@ -36,72 +145,22 @@ function createField(size) {
                 cell.style.top = y + "em";
             }
         };
-        createRandomPic(cellObj);
         cellObj.setX(point.x);
         cellObj.setY(point.y);
-        cells[`x${point.x}-y${point.y}`] = cellObj;
+        cells[`x${point.x}_y${point.y}`] = cellObj;
+
+        createRandomPic(cellObj);
     });
+
+
+
 
     return {
         field_element,
         cells,
-        getSuchka : (x, y, distance = 1) => {
-            const current_cell = cells[`x${x}-y${y}`];
-            if(!current_cell){
-                return [];
-            }
-            const result = [];
-            result['current'] = current_cell;
-            for(let i = 1; i < distance + 1; i++) {
-                if(y >= 0 && y <= size.height){
-                    const top_cell = cells[`x${x}-y${y-i}`];
-                    if(top_cell){
-                        if(!result['top']){
-                            result['top'] = [];
-                        }
-                        result['top'].push(top_cell);
-                        top_cell.element.classList.add('suchka');
-                    }
-
-                    const bottom_cell = cells[`x${x}-y${y+i}`];
-                    if(bottom_cell){
-                        if(!result['bottom']){
-                            result['bottom'] = [];
-                        }
-                        result['bottom'].push(bottom_cell);
-                        bottom_cell.element.classList.add('suchka');
-                    }
-                }
-                if(x >= 0 && x <= size.width){
-                    const left_cell = cells[`x${x-i}-y${y}`];
-                    if(left_cell){
-                        if(!result['left']){
-                            result['left'] = [];
-                        }
-                        result['left'].push(left_cell);
-                        left_cell.element.classList.add('suchka');
-                    }
-
-                    const right_cell = cells[`x${x+i}-y${y}`];
-                    if(right_cell){
-                        if(!result['right']){
-                            result['right'] = [];
-                        }
-                        result['right'].push(right_cell);
-                        right_cell.element.classList.add('suchka');
-                    }
-                }
-            }
-
-            return result;
-        },
+        getSuchka,
+        getKey,
     }
 }
 
 
-
-function createRandomPic(cell){
-    let picId = Math.floor(Math.random() * 6 +1);
-    // console.log(cell.getX(5).setPic(picId));
-    return cell.setPic(picId)
-}
