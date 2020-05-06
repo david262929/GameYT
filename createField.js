@@ -3,8 +3,8 @@ function createField(size) {
     const field = document.createElement("div");
     field.classList.add("field");
     const pointsArr = generateMatrix(size);
-
-    const cells = pointsArr.map(function (point) {
+    const cells = [];
+    pointsArr.forEach(function (point) {
         const cell = document.createElement("div");
         cell.classList.add("cell");
         // cell.setAttribute('id', `pos_${point.x}x${point.y}`);
@@ -12,6 +12,7 @@ function createField(size) {
         cell.point = point;
         var inner = document.createElement("div");
         cell.appendChild(inner);
+        field.appendChild(cell);
         var cellObj = {
             element:cell,
             getPic:function(){
@@ -36,14 +37,11 @@ function createField(size) {
                 cell.style.top = y + "em";
             }
         }
-        cellObj.setX(point.x)
-        cellObj.setY(point.y)
-        return cellObj;
-    })
+        cellObj.setX(point.x);
+        cellObj.setY(point.y);
+        cells[`x${point.x}y${point.y}`] = cellObj;
+    });
 
-    cells.forEach(function (cell) {
-        field.appendChild(cell.element)
-    })
     return {
         element: field,
         cells: cells
