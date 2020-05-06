@@ -1,21 +1,61 @@
 const size = {width: 7, height: 7};
 const field = createField(size);
 const gameArea = document.createElement("div");
+const info = document.createElement("div");
+const time = document.createElement("div");
+let count = 60;
 
+time.setAttribute('id', `time`);
+time.classList.add("time");
+info.appendChild(time)
+info.classList.add("info");
+gameArea.appendChild(info)
 gameArea.classList.add("gameArea");
 gameArea.appendChild(field.element);
 document.body.appendChild(gameArea);
-
 field.cells.forEach(createRandomPic)
 
+boom();
+function boom() {
+    checkPics()
+}
+function checkPics() {
+
+    for (let x = 0; x < size.width; x++) {
+        let bigGroupsX = picLines(x).filter(function (group) {
+            return group.length >= 3;
+        })
+        bigGroupsX.forEach(function (group) {
+            group.forEach(function (cell) {
+                cell.setPic(0)
+            })
+            setTimeout(fallDown, 100);
+            setTimeout(addNewPic, 100)
+            // count += group.length + 1
+        })
+        for (let y = 0; y < size.height; y++) {
+            let bigGroupsY = picRows(y).filter(function (group) {
+                return group.length >= 3;
+            })
+            bigGroupsY.forEach(function (group) {
+                group.forEach(function (cell) {
+                    cell.setPic(0)
+                })
+                setTimeout(fallDown, 100);
+                setTimeout(addNewPic, 100)
+                // count += group.length + 1
+            })
+        }
+    }
+}
     field.element.addEventListener("click", function (event) {
         var cellElement = event.target.closest(".cell");
         if (cellElement) {
             var foundCell = field.cells.find(function (cell) {
                 return cell.getX() === +cellElement.dataset.x && cell.getY() === +cellElement.dataset.y
             });
-            selectPic(foundCell)
         }
+        selectPic(foundCell)
     });
 
 let prevCell = null;
@@ -46,6 +86,7 @@ function nearPics(cell1, cell2) {
     return false;
 }
 
+
 function selectPic(currentCell) {
 
     if (currentCell === prevCell) {
@@ -58,30 +99,46 @@ function selectPic(currentCell) {
         prevCell.element.classList.add("active")
         return
     }
-    if (nearPics(prevCell, currentCell)) {
+    if (nearPics(prevCell, currentCell) ) {
         swapPics(prevCell, currentCell)
         for (let x = 0; x < size.width; x++) {
             let bigGroupsX = picLines(x).filter(function (group) {
                 return group.length >= 3;
             })
+            bigGroupsX.forEach(function (group) {
+                group.forEach(function (cell) {
+                    if (cell.getPic() === 5){
+                        count ++;
+                    }
+                    cell.setPic(0)
+                })
+                fallDown();
+                setTimeout(addNewPic,10)
+                // count += group.length+1
+            })
+        }
             for (let y = 0; y < size.height; y++) {
                 let bigGroupsY = picRows(y).filter(function (group) {
                     return group.length >= 3;
                 })
-                let  bigGroups = [...bigGroupsX,...bigGroupsY];
-                // console.log(bigGroups);
-
-                bigGroups.forEach(function (group) {
+                bigGroupsY.forEach(function (group) {
                     group.forEach(function (cell) {
+                        if (cell.getPic() === 5){
+                            count ++;
+                        }
                         cell.setPic(0)
                     })
                     fallDown();
                     setTimeout(addNewPic,10)
+                    // count += group.length+1
                 })
             }
-        }
-    }
+                // let  bigGroups = [...bigGroupsX,...bigGroupsY];
 
+
+
+
+    }
 
     prevCell.element.classList.remove("active");
     prevCell = null;
@@ -144,6 +201,7 @@ function picRows(x) {
     // console.log(result);
     return result;
 }
+
 function fallDown() {
     for (let y = 0; y < size.height; y++) {
         let column = field.cells.filter(function (cell) {
@@ -170,5 +228,25 @@ function addNewPic() {
             return (cell.getPic() === 0)
         }).forEach(createRandomPic)
     }
+    checkPics();
     return emptyCell
 }
+function timeer() {
+
+    const time =document.getElementById("time")
+
+
+    setInterval(function () {
+        count --;
+        if (count >= 0) {
+            time.innerHTML = `00:${count}`;
+        }
+        if(count === 0){
+            time.innerHTML = "Game Over"
+            clearInterval(timeer)
+        }
+    },1000)
+
+
+}
+timeer();

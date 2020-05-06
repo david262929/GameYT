@@ -51,6 +51,7 @@ function createField(size) {
 }
 
 function createRandomPic(cell){
-    let picId =Math.floor(Math.random() * 6 +1);
-    cell.setPic(picId)
+    let picId = Math.floor(Math.random() * 6 +1);
+    // console.log(cell.getX(5).setPic(picId));
+    return cell.setPic(picId)
 }
