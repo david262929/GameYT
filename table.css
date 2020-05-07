@@ -10,23 +10,8 @@ body{
     width: 100%;
     height: 100%;
 }
-.cell {
-    display: flex;
-    position: absolute;
-    width: 1em;
-    height: 1em;
-    align-items: center;
-    justify-content: center;
-    border-radius: 30%;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 500ms;
-}
-.cell:hover{
-    opacity: 0.75;
-}
-.cell.suchka{
-    background-color: beige;
+body, .display_none{
+    display: none;
 }
 .field{
     display: flex;
@@ -37,7 +22,7 @@ body{
     justify-content: center;
     align-items: center;
     border-radius: 2%;
-    background-image: url("7x7.png");
+    /*background-image: url("7x7.png");*/
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -52,9 +37,6 @@ body{
     background-size: cover;
     flex-direction: column;
     overflow: hidden;
-}
-.active{
-    border: 1px solid greenyellow;
 }
 .info{
     display: flex;
@@ -77,69 +59,82 @@ body{
     font-family: "Times New Roman", Times, serif;
 
 }
-.pic1{
-    width: 100%;
-    height: 100%;
-    background-image: url("01.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    animation: pic 1s linear;
-}
-.pic2{
-    width: 100%;
-    height: 100%;
-    background-image: url("02.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    animation: pic 1s linear;
-    transition: all 500ms;
-}
-.pic3{
-    width: 100%;
-    height: 100%;
+.cell {
     display: flex;
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 500ms;
+    transform: rotateZ(0deg);
+    background-color: #8d0e2fab;
+}
+.cell:hover{
+    opacity: 0.75;
+}
+.cell.shake{
+    animation: shake .5s 2;
+}
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+.cell.suchka{
+    background-color: beige;
+}
+.cell.active{
+    border: 1px solid greenyellow;
+    transform: rotateZ(360deg);
+}
+.cell.active .pic{
+    /*transform: scale(.85);*/
+}
+.cell .pic{
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
     background-position: center;
+    transition: all 250ms;
+}
+[data-pic-id="1"]{
+    background-image: url("01.png");
+}
+[data-pic-id="2"]{
+    background-image: url("02.png");
+}
+[data-pic-id="3"]{
     background-image: url("03.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    animation: pic 1s linear;
-    transition: all 500ms;
 }
-.pic4{
-    width: 100%;
-    height: 100%;
+[data-pic-id="4"]{
     background-image: url("04.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    animation: pic 1s linear;
-    transition: all 500ms;
 }
-.pic5{
-    width: 100%;
-    height: 100%;
+[data-pic-id="5"]{
     background-image: url("05.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    animation: pic 1s linear;
-    transition: all 500ms;
+    background-color: gold;
 }
-.pic6{
-    width: 100%;
-    height: 100%;
+[data-pic-id="6"]{
     background-image: url("06.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    animation: pic 1s linear;
-    transition: all 500ms;
+}
+[data-pic-id]:not([data-pic-id="-1"]){
+    animation: pic .5s linear;
 }
 @keyframes pic {
     0%{
-        transform: translate(0,-10em);
+        transform: translate(0,-100%);
     }
     100%{
         transform: translate(0,0);
