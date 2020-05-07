@@ -1,4 +1,4 @@
-import {width, height} from '@assests/configs';
+import {width, height} from './configs';
 
 
 export const generateKey = (x, y) => {

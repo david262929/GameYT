@@ -1,4 +1,4 @@
-import {toShakeIt, generateKey, getSuchka, generateCoordinates} from '@assets/functions';
+import {toShakeIt, generateKey, getSuchka, generateCoordinates} from './functions';
 
 function CellTemplate (cell, inner, x, y) {
     this.element = cell;
