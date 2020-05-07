@@ -1,4 +1,4 @@
-function run() {
+// function run() {
     const width = 7;
     const height = 7;
     const size = {width, height};
@@ -15,12 +15,10 @@ function run() {
             return;
         }
         var cellElement = target.closest(".cell");
-        if (cellElement) {
-            selectCell(cells[getKey(+cellElement.dataset.x, +cellElement.dataset.y)])
-        } else {
-            console.log('Viahkners vat e');
+        if (!cellElement) {
+            return;
         }
-
+        selectCell(cells[getKey(+cellElement.dataset.x, +cellElement.dataset.y)])
     });
 
     const gameArea = document.createElement("div");
@@ -226,4 +224,4 @@ function run() {
             prevCell = null;
         });
     }
-};
+// };
