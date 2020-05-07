@@ -1,14 +1,21 @@
-const size = {width: 7, height: 7};
+const width = 7;
+const height = 7;
+const size = {width, height};
+const boomMinimumLimit = 3;
 const {field_element, cells, getSuchka, getKey} = createField(size);
+
+window.onload = () => {
+    document.body.style.display = 'flex';
+};
 
 field_element.addEventListener("click", function (event) {
     const {target} = event;
-    if(!target || field_element == target){
+    if (!target || field_element == target) {
         return;
     }
     var cellElement = target.closest(".cell");
     if (cellElement) {
-        selectCell( cells[ getKey(+cellElement.dataset.x, +cellElement.dataset.y) ]    )
+        selectCell(cells[getKey(+cellElement.dataset.x, +cellElement.dataset.y)])
     } else {
         console.log('Viahkners vat e');
     }
@@ -45,7 +52,7 @@ document.body.appendChild(gameArea);
 //         })
 //         bigGroupsX.forEach(function (group) {
 //             group.forEach(function (cell) {
-//                 cell.setPic(0)
+//                 cell.setPicID(0)
 //             })
 //             setTimeout(fallDown, 100);
 //             setTimeout(addNewPic, 100)
@@ -57,7 +64,7 @@ document.body.appendChild(gameArea);
 //             })
 //             bigGroupsY.forEach(function (group) {
 //                 group.forEach(function (cell) {
-//                     cell.setPic(0)
+//                     cell.setPicID(0)
 //                 })
 //                 setTimeout(fallDown, 100);
 //                 setTimeout(addNewPic, 100)
@@ -98,11 +105,161 @@ document.body.appendChild(gameArea);
 //
 //
 
-const getBoomerables = (line) => {
-    console.log(line);
+const swapCells = (cur, prev, timer = 0) => new Promise( resolve => {
+    let curX = cur.getX(), curY = cur.getY(), prevX = prev.getX(), prevY = prev.getY();
+    [cells[getKey(curX, curY)], cells[getKey(prevX, prevY)]] = [cells[getKey(prevX, prevY)], cells[getKey(curX, curY)]];
+
+    cur.setX(prevX);
+    cur.setY(prevY);
+    prev.setX(curX);
+    prev.setY(curY);
+
+    setTimeout(() => resolve(), timer);
+});
+
+const getLine = (cell, coordName) => {
+    let isXCoord = coordName == 'x';
+    let limit = isXCoord ? width : height;
+    let result = [];
+    let i = 0;
+    while (i < limit) {
+        const keys = [];
+        if (isXCoord) {
+            keys.push(i);
+            keys.push(cell.getY());
+        } else {
+            keys.push(cell.getX());
+            keys.push(i);
+        }
+        result.push(cells[getKey(...keys)]);
+        ++i;
+    }
+    return result;
+};
+
+const getCurrLines = (cell) => {
+    return {
+        horizontal: getLine(cell, 'x'),
+        vertical: getLine(cell, 'y'),
+    };
+};
+
+const getBoomerables = (cell) => {
+    // cell.element.classList.add('suchka');
+    const lines = getCurrLines(cell);
+    const boomerable = [];
+    Object.keys(lines).forEach(key => {
+        let local_boomerable = [];
+        let type = cell.getPicID();
+        const line = lines[key];
+
+        const coordNames = [];
+        coordNames['horizontal'] = 'getX';
+        coordNames['vertical'] = 'getY';
+
+        line.forEach(local_cell => {
+            if (type == local_cell.getPicID()) {
+                if (local_boomerable.length) {
+                    const localCellCoord = local_cell[coordNames[key]]();
+
+                    const lastCell = local_boomerable[local_boomerable.length - 1];
+                    const lastCellCoord = lastCell[coordNames[key]]();
+
+                    if (Math.abs(localCellCoord - lastCellCoord) == 1) {
+                        local_boomerable.push(local_cell);
+                    }
+                    return;
+                }
+                local_boomerable.push(local_cell);
+                return;
+            }
+
+            if (!local_boomerable.includes(cell)) {
+                type = local_cell.getPicID();
+                local_boomerable = [local_cell];
+            }
+        });
+        if (local_boomerable.length < boomMinimumLimit || !local_boomerable.includes(cell)) {
+            return;
+        }
+        boomerable[key] = local_boomerable;
+    });
+    return boomerable;
+};
+
+const boom = (cell) => {
+    cell.destroy();
+    let topCellsOfCurrent = getSuchka(cell.getX(), cell.getY(), Infinity, '', 'top');
+    topCellsOfCurrent = topCellsOfCurrent['top'] || [];
+
+    topCellsOfCurrent.forEach(topCellOfCurrent => {
+        swapCells(topCellOfCurrent, cell);
+    });
+
+};
+
+const initBoom = (...cells) => {
+    let haveBoomed = false;
+    let boomedMainCells = [];
+    let boomeds = [];
+
+    cells.forEach((cell, index) => {
+        const boomerables = getBoomerables(cell);
+
+        if (index === cells.length - 1 && haveBoomed) {
+            // console.log(boomedMainCells);
+            boomedMainCells.forEach(boomedMainCell => {
+                boom(boomedMainCell);
+                boomeds.push(boomedMainCell);
+            });
+        }
+
+        if (!boomerables['horizontal'] && !boomerables['vertical']) {
+            return;
+        }
+        haveBoomed = true;
+
+        Object.keys(boomerables).forEach(key => {
+            const lineOfBoomerables = boomerables[key];
+            lineOfBoomerables.forEach(boomerable => {
+                if (boomerable == cell) {
+                    return;
+                }
+                boom(boomerable);
+                boomeds.push(boomerable);
+            });
+        });
+        if (index === cells.length - 1 && haveBoomed) {
+            boom(cell);
+            boomeds.push(cell);
+        }else{
+            boomedMainCells.push(cell);
+        }
+    });
+
+    boomeds.forEach(boomed => {
+        // boomed.element.classList.add('suchka');
+        setTimeout(() => {
+            boomed.randomPic();
+            initBoom(boomed);
+        }, 250);
+    });
+
+
+
+    return haveBoomed;
+};
+
+const toShakeIt = (cell) => {
+    const nearLines = getSuchka(cell.getX(), cell.getY(), 1);
+    console.log(nearLines);
+    Object.keys(nearLines).forEach(key => {
+        nearLines[key].forEach( near => near.toShake());
+    });
 };
 
 let prevCell = null;
+
 function selectCell(currentCell) {
 
     if (currentCell === prevCell) {
@@ -119,29 +276,71 @@ function selectCell(currentCell) {
     const curX = currentCell.getX();
     const curY = currentCell.getY();
     const prevX = prevCell.getX();
-    const prevY = prevCell.getX();
-    console.log(curX, curY, prevX, prevY, curX == prevX , curY == prevY);
-    if( curX == prevX || curY == prevY ){
-        console.log('click era ira koghqinenerin');
+    const prevY = prevCell.getY();
+
+    if (
+        !(
+            (curX == prevX && (Math.abs(prevY - curY) == 1))
+            || (curY == prevY && (Math.abs(prevX - curX) == 1))
+        )
+    ) {
+        toShakeIt(prevCell);
+        prevCell.element.classList.remove("active");
+        prevCell = null;
+        // getSuchka(prevX, prevY, 1);
         return;
     }
 
-    console.log(currentCell, prevCell);
+    swapCells(currentCell, prevCell, 500).then((cur, prev) => {
+        const boomed = initBoom(currentCell, prevCell);
+        if(!boomed){
+            swapCells(currentCell, prevCell);
+        }
+        prevCell.element.classList.remove("active");
+        prevCell = null;
+    });
 
 
+    // let curNearbies = getSuchka(currentCell.getX(), currentCell.getY(), Infinity),
+    //     prevNearbies = getSuchka(prevCell.getX(), prevCell.getY(), Infinity);
 
-    // const nearbyCells = getSuchka(currentCell.getX(), currentCell.getY(), Infinity);
-    // Object.keys(nearbyCells).forEach((key) => {
-    //     const nearbyLine = nearbyCells[key];
+    // const boomeds = initBoom(currentCell); //, prevCell
+    // if(boomeds.length){
+    //     return;
+    // }
+    // swapCells(currentCell, prevCell);
+
+    // let curHorizontal = [...curNearbies['left'].reverse(),currentCell, ...curNearbies['right'] ]
+    //
+    // //,
+    // //         curVertical = [...curNearbies['bottom'].reverse(),currentCell, ...curNearbies['top'] ];
+    //
+    //     // prevHorizontal = [...prevNearbies['left'].reverse(),currentCell, ...prevNearbies['right'] ],
+    //     // prevVertical = [...prevNearbies['bottom'].reverse(),currentCell, ...prevNearbies['top'] ];
+    //
+    // console.log(curHorizontal);
+    // console.log(curVertical);
+    // Object.keys(curNearbies).forEach((key) => {
+    //     const nearbyLine = curNearbies[key];
+    //     console.log(currentCell);
     //     nearbyLine.unshift(currentCell);
     //     getBoomerables(nearbyLine);
     // });
-    ///
 
 
-    prevCell.element.classList.remove("active");
-    prevCell = null;
+    // let isBoomerable =
+
+
+    // if ((curX - prevX === 0 && curY - prevY === 1) ||
+    //     (curX - prevX === -1 && curY - prevY === 0) ||
+    //     (curX - prevX === 0 && curY - prevY === -1) ||
+    //     (curX - prevX === 1 && curY - prevY === 0)
+    // ) {
+    //     console.log(currentCell, prevCell);
+    //     return;
+    // }
 }
+
 //
 // function picLines(y) {
 //
@@ -159,7 +358,7 @@ function selectCell(currentCell) {
 //             currentGroup.push(currentCell);
 //         } else {
 //             var prevCell = currentGroup[0];
-//             if (prevCell.getPic() === currentCell.getPic()) {
+//             if (prevCell.getPicID() === currentCell.getPicID()) {
 //                 currentGroup.push(currentCell);
 //             } else {
 //                 result.push(currentGroup);
@@ -188,7 +387,7 @@ function selectCell(currentCell) {
 //             currentGroup.push(currentCell);
 //         } else {
 //             var prevCell = currentGroup[0];
-//             if (prevCell.getPic() === currentCell.getPic()) {
+//             if (prevCell.getPicID() === currentCell.getPicID()) {
 //                 currentGroup.push(currentCell);
 //             } else {
 //                 result.push(currentGroup);
@@ -208,9 +407,10 @@ function selectCell(currentCell) {
 //         }).sort(function (cell1, cell2) {
 //             return cell1.getY() - cell2.getY()
 //         })
+//
 //         column.sort(function (cell1, cell2) {
-//             let cell1Value = cell1.getPic() === 0 ? 0 : 1;
-//             let cell2Value = cell2.getPic() === 0 ? 0 : 1;
+//             let cell1Value = cell1.getPicID() === 0 ? 0 : 1;
+//             let cell2Value = cell2.getPicID() === 0 ? 0 : 1;
 //             let result = cell1Value - cell2Value;
 //
 //             return result;
@@ -225,7 +425,7 @@ function selectCell(currentCell) {
 // function addNewPic() {
 //     for (let x = 0; x < size.width; x++) {
 //         var emptyCell = field.cells.filter(function (cell) {
-//             return (cell.getPic() === 0)
+//             return (cell.getPicID() === 0)
 //         }).forEach(createRandomPic)
 //     }
 //     checkPics();
