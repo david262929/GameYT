@@ -1,1 +1,26 @@
+#Editor cache dir
 .idea
+**/.idea
+
+#MacOs Cache
+.DS_Store
+**/.DS_Store
+
+
+
+#Development temp files
+node_modules
+**/node_modules
+yarn.lock
+.sass-cache
+**/.sass-cache
+*.css
+*.css.map
+yarn-error.log
+package-lock.json
+
+#Deployment temp local dir
+dist
+
+#Build file
+app.min.js
