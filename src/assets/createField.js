@@ -1,4 +1,4 @@
-import {toShakeIt, generateKey, getSuchka, generateCoordinates} from './functions';
+import { generateKey, generateCoordinates} from './functions';
 import {width, height} from './configs';
 
 function CellTemplate (cell, inner, x, y) {
@@ -9,6 +9,11 @@ function CellTemplate (cell, inner, x, y) {
     };
 
     this.setPicID = function(id){
+        if(id === 5){
+            this.element.classList.add('gold');
+        }else{
+            this.element.classList.remove('gold');
+        }
         this.inner.dataset.picId = id;
         return this;
     };
@@ -60,15 +65,10 @@ function CellTemplate (cell, inner, x, y) {
 };
 
 export const createField = () => {
-
-    const gameArea = document.createElement("div");
-    gameArea.classList.add("gameArea");
-
     const field_element = document.createElement("div");
     field_element.classList.add("field");
-    gameArea.appendChild(field_element);
 
-    const cells = [];
+    window.cells = [];
 
     generateCoordinates(width, height).forEach( (point) => {
         const {x, y} = point;
@@ -84,9 +84,7 @@ export const createField = () => {
         cells[generateKey(x, y)] = new CellTemplate(cell, inner, x, y);
     });
 
-
     return {
-        gameArea,
         field_element,
         cells,
     }

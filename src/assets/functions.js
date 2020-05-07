@@ -1,11 +1,10 @@
 import {width, height} from './configs';
-// import
 
 export const generateKey = (x, y) => {
     return `x${x}_y${y}`;
 };
 
-export const getSuchka = (x, y, distance = Infinity, mode = '', ...ways) => {
+export const getSuchka = ( x, y, distance = Infinity, mode = '', ...ways) => {
     if(!ways.length){
         ways = ['top', 'bottom', 'left', 'right'];
 
@@ -57,9 +56,8 @@ export const getSuchka = (x, y, distance = Infinity, mode = '', ...ways) => {
     return result;
 };
 
-export const toShakeIt = (cell) => {
-    const nearLines = getSuchka(cell.getX(), cell.getY(), 1);
-    console.log(nearLines);
+export const toShakeIt = ( cell) => {
+    const nearLines = getSuchka( cell.getX(), cell.getY(), 1);
     Object.keys(nearLines).forEach(key => {
         nearLines[key].forEach( near => near.toShake());
     });
@@ -76,6 +74,11 @@ export const generateCoordinates = (width, height) => {
     return result;
 };
 
-export const addImages = () => {
+export const sec2time = (_seconds) => {
+    const pad = (num, size) => ('000' + num).slice(size * -1),
+        time = parseFloat(_seconds).toFixed(3),
+        minutes = Math.floor(time / 60) % 60,
+        seconds = Math.floor(time - minutes * 60);
 
+    return pad(minutes, 2) + ':' + pad(seconds, 2);
 };

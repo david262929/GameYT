@@ -1,53 +1,23 @@
-import suka1 from '@img/01.png';
-import suka2 from '@img/02.png';
-import suka3 from '@img/03.png';
-import suka4 from '@img/04.png';
-import suka5 from '@img/05.png';
-import suka6 from '@img/06.png';
-import background from '@img/background.jpg';
-import '@style/main';
-
-document.body.style.backgroundImage = `url(${background})`;
-const style = document.createElement('style');
-document.body.appendChild(style);
-style.innerHTML = `
-    [data-pic-id="1"] {
-        background-image: url(${suka1});
-    }
-        
-    [data-pic-id="2"] {
-        background-image: url(${suka2});
-    }
-        
-    [data-pic-id="3"] {
-        background-image: url(${suka3});
-    }
-        
-    [data-pic-id="4"] {
-        background-image: url(${suka4});
-    }
-        
-    [data-pic-id="5"] {
-        background-image: url(${suka5});
-    }
-        
-    [data-pic-id="6"] {
-        background-image: url(${suka6});
-    }
-`;
-
-import {toShakeIt, getSuchka} from './assets/functions';
-import {width, height, boomMinimumLimit} from './assets/configs';
-import {createField} from './assets/createField';
-
 const game = document.querySelector('#game');
 const start = document.querySelector('#start');
 const loading = document.querySelector('#loading');
 
+start.style.display = loading.style.display = 'none';
+
+import {toShakeIt, getSuchka, generateKey} from './assets/functions';
+import {width, height, boomMinimumLimit} from './assets/configs';
+import {createField} from './assets/createField';
+import {Timer} from './assets/timer';
+import {Results} from './assets/results';
+
+
 let prevCell = null;
-const size = {width, height};
-const {gameArea, field_element, cells} = createField(width, height);
-game.appendChild(gameArea);
+const {field_element, cells} = createField(width, height);
+game.appendChild(field_element);
+field_element.style.width = `${width}em`;
+field_element.style.height = `${height}em`;
+
+
 
 const swapCells = (cur, prev, timer = 0) => new Promise(resolve => {
     let curX = cur.getX(), curY = cur.getY(), prevX = prev.getX(), prevY = prev.getY();
@@ -67,9 +37,13 @@ const getLine = (cell, coordName) => {
     let result = [];
     let i = 0;
     while (i < limit) {
-        const keys = [cell.getX(), i];
+        const keys = [];
         if (isXCoord) {
-            keys.reverse();
+            keys.push(i);
+            keys.push(cell.getY());
+        } else {
+            keys.push(cell.getX());
+            keys.push(i);
         }
         result.push(cells[generateKey(...keys)]);
         ++i;
@@ -169,7 +143,7 @@ const getBoomerables = (cell) => {
 
 const boom = (cell) => {
     cell.destroy();
-    let topCellsOfCurrent = getSuchka(cell.getX(), cell.getY(), Infinity, '', 'top');
+    let topCellsOfCurrent = getSuchka( cell.getX(), cell.getY(), Infinity, '', 'top');
     topCellsOfCurrent = topCellsOfCurrent['top'] || [];
 
     topCellsOfCurrent.forEach(topCellOfCurrent => {
@@ -178,15 +152,15 @@ const boom = (cell) => {
 
 };
 
-const initBoom = (...cells) => {
+const initBoom = (...cellsForcheck) => {
     let haveBoomed = false;
     let boomedMainCells = [];
     let boomeds = [];
 
-    cells.forEach((cell, index) => {
+    cellsForcheck.forEach((cell, index) => {
         const boomerables = getBoomerables(cell);
 
-        if (index === cells.length - 1 && haveBoomed) {
+        if (index === cellsForcheck.length - 1 && haveBoomed) {
             // console.log(boomedMainCells);
             boomedMainCells.forEach(boomedMainCell => {
                 boom(boomedMainCell);
@@ -209,12 +183,13 @@ const initBoom = (...cells) => {
                 boomeds.push(boomerable);
             });
         });
-        if (index === cells.length - 1 && haveBoomed) {
+        if (index === cellsForcheck.length - 1 && haveBoomed) {
             boom(cell);
             boomeds.push(cell);
         } else {
             boomedMainCells.push(cell);
         }
+
     });
 
     boomeds.forEach(boomed => {
@@ -231,6 +206,8 @@ const initBoom = (...cells) => {
 
 window.addEventListener('load', () => {
     document.body.style.display = 'flex';
+    setTimeout( Timer.start, 200);
+
     field_element.addEventListener("click", function (event) {
         const {target} = event;
         if (!target || field_element == target) {

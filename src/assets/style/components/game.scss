@@ -1,187 +1,273 @@
 @import "./mixins";
 //@import "@img/background.jpg";
 
+body{
+    @include respond-to('max-width:1000px'){
+        font-size: 65px;
+    }
+}
 #game{
     @include fullScreen;
-    .gameArea {
+    justify-content: space-evenly;
+    align-items: center;
+    background-size: cover;
+    flex-direction: column;
+    font-size: 85px;
+    color: white;
+    @media only screen and (max-width: 981px) {
+        font-size: 60px;
+    }
+    //background-image: url("./background.jpg");
+
+
+    .field {
         display: flex;
         position: relative;
         width: 100%;
         height: 100%;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
-        background-size: cover;
-        flex-direction: column;
-        overflow: hidden;
-        //background-image: url("./background.jpg");
-
-
-        .field {
+        border-radius: 2%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        margin-bottom: 1em;
+        .cell {
             display: flex;
-            position: relative;
-            font-size: 85px;
-            width: 100%;
-            height: 100%;
-            justify-content: center;
+            position: absolute;
+            width: 1em;
+            height: 1em;
             align-items: center;
-            border-radius: 2%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            .cell {
-                display: flex;
-                position: absolute;
-                width: 1em;
-                height: 1em;
-                align-items: center;
-                justify-content: center;
-                border-radius: 30%;
-                overflow: hidden;
-                cursor: pointer;
-                transition: all 500ms;
-                transform: rotateZ(0deg);
-                background-color: #8d0e2fab;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 500ms;
+            transform: scale(.95)  rotateZ(0deg);
+            background-color: #8d0e2fab;
+            border-radius: 18px;
+            &.gold{
+                background-color: gold;
+            }
+            @include respond-to(iphonex) {
+                border-radius: 10px;
+            }
+            @media only screen and (max-width: 550px) {
+                border-radius: 10px;
+            }
 
-                &:hover {
-                    opacity: 0.75;
-                }
+            &:hover {
+                opacity: 0.75;
+            }
 
-                &.shake {
-                    animation: shake .5s 2;
-                }
+            &.shake {
+                animation: shake .5s 2;
+            }
 
-                &.suchka {
-                    background-color: beige;
-                }
+            &.suchka {
+                background-color: beige;
+            }
 
-                &.active {
-                    border: 1px solid greenyellow;
-                    transform: rotateZ(360deg);
-
-                    .pic {
-                        /*transform: scale(.85);*/
-                    }
-                }
-
+            &.active {
+                border: 1px solid greenyellow;
+                transform: scale(.95)  rotateZ(360deg);
                 .pic {
-                    width: 100%;
-                    height: 100%;
-                    background-size: contain;
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    transition: all 250ms;
-                    //width: 120px;
-                    //height: 120px;
-                    //transform: scale(0.7083333333333334);
-                    max-width: 100%;
-                    //background-size: 100%;
+                    /*transform: scale(.85);*/
+                }
+            }
 
-                    //&[data-pic-id="1"] {
-                    //    background-position: 0 0%;
-                    //}
-                    //
-                    //&[data-pic-id="2"] {
-                    //    background-position: 0 20%;
-                    //}
-                    //
-                    //&[data-pic-id="3"] {
-                    //    background-position: 0 40%;
-                    //}
-                    //
-                    //&[data-pic-id="4"] {
-                    //    background-position: 0 60%;
-                    //}
-                    //
-                    //&[data-pic-id="5"] {
-                    //    background-position: 0 80%;
-                    //}
-                    //
-                    //&[data-pic-id="6"] {
-                    //    background-position: 0 100%;
-                    //}
+            .pic {
+                width: 80%;
+                height: 100%;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                transition: all 250ms;
+                //width: 120px;
+                //height: 120px;
+                //transform: scale(0.7083333333333334);
+                max-width: 100%;
+                //background-size: 100%;
 
-                    &[data-pic-id]:not([data-pic-id="-1"]) {
-                        animation: pic .5s linear;
-                    }
+                //&[data-pic-id="1"] {
+                //    background-position: 0 0%;
+                //}
+                //
+                //&[data-pic-id="2"] {
+                //    background-position: 0 20%;
+                //}
+                //
+                //&[data-pic-id="3"] {
+                //    background-position: 0 40%;
+                //}
+                //
+                //&[data-pic-id="4"] {
+                //    background-position: 0 60%;
+                //}
+                //
+                //&[data-pic-id="5"] {
+                //    background-position: 0 80%;
+                //}
+                //
+                //&[data-pic-id="6"] {
+                //    background-position: 0 100%;
+                //}
+
+                &[data-pic-id]:not([data-pic-id="-1"]) {
+                    animation: pic .5s linear;
+                }
+            }
+
+            @keyframes shake {
+                0% {
+                    transform: translate(1px, 1px) rotate(0deg);
                 }
 
-                @keyframes shake {
-                    0% {
-                        transform: translate(1px, 1px) rotate(0deg);
-                    }
-
-                    10% {
-                        transform: translate(-1px, -2px) rotate(-1deg);
-                    }
-
-                    20% {
-                        transform: translate(-3px, 0px) rotate(1deg);
-                    }
-
-                    30% {
-                        transform: translate(3px, 2px) rotate(0deg);
-                    }
-
-                    40% {
-                        transform: translate(1px, -1px) rotate(1deg);
-                    }
-
-                    50% {
-                        transform: translate(-1px, 2px) rotate(-1deg);
-                    }
-
-                    60% {
-                        transform: translate(-3px, 1px) rotate(0deg);
-                    }
-
-                    70% {
-                        transform: translate(3px, 1px) rotate(-1deg);
-                    }
-
-                    80% {
-                        transform: translate(-1px, -1px) rotate(1deg);
-                    }
-
-                    90% {
-                        transform: translate(1px, 2px) rotate(0deg);
-                    }
-
-                    100% {
-                        transform: translate(1px, -2px) rotate(-1deg);
-                    }
+                10% {
+                    transform: translate(-1px, -2px) rotate(-1deg);
                 }
 
-                @keyframes pic {
-                    0% {
-                        transform: translate(0, -100%);
-                    }
+                20% {
+                    transform: translate(-3px, 0px) rotate(1deg);
+                }
 
-                    100% {
-                        transform: translate(0, 0);
+                30% {
+                    transform: translate(3px, 2px) rotate(0deg);
+                }
+
+                40% {
+                    transform: translate(1px, -1px) rotate(1deg);
+                }
+
+                50% {
+                    transform: translate(-1px, 2px) rotate(-1deg);
+                }
+
+                60% {
+                    transform: translate(-3px, 1px) rotate(0deg);
+                }
+
+                70% {
+                    transform: translate(3px, 1px) rotate(-1deg);
+                }
+
+                80% {
+                    transform: translate(-1px, -1px) rotate(1deg);
+                }
+
+                90% {
+                    transform: translate(1px, 2px) rotate(0deg);
+                }
+
+                100% {
+                    transform: translate(1px, -2px) rotate(-1deg);
+                }
+            }
+
+            @keyframes pic {
+                0% {
+                    transform: translate(0, -100%);
+                }
+
+                100% {
+                    transform: translate(0, 0);
+                }
+            }
+        }
+    }
+
+
+    .timer {
+        display: flex;
+        position: relative;
+        width: auto;
+        height: 1em;
+        margin: .5em auto;
+        font-size: .7em;
+        color: white;
+        justify-content: space-evenly;
+        align-items: center;
+        text-align: center;
+        font-family: monospace;
+        transition: .5s ease-out;
+        transform: scale(1);
+        span{
+            &.plusSeconds{
+                animation:  plusSeconds .4s ease 1;
+
+                @keyframes plusSeconds {
+                    0%,100% {
+                        transform: scale(1);
+                    }
+                    45%,55% {
+                        transform: scale(1.2);
                     }
                 }
             }
         }
+        ._plus{
+            position: absolute;
+            top: -5px;
+            left: calc(100% + 30px);
+            transform: translate(0,+20%);
 
+            animation:  _plusAnimateToTop 1.2s ease 1;
 
-        .time {
-            display: flex;
-            position: relative;
-            width: 50%;
-            height: 100%;
-            color: white;
-            justify-content: flex-start;
-            align-items: center;
-            font-size: 40px;
-            text-align: center;
-            font-family: "Times New Roman", Times, serif;
+            @keyframes _plusAnimateToTop {
+                0% {
+                    transform: translate(0,+20%);
+                    opacity: 0;
+                }
+                20%, 80%{
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(0,-150%);
+                }
+            }
         }
-        .info {
+    }
+    .results {
+        position: relative;
+        width: 100%;
+        height: auto;
+        font-family: monospace;
+        font-size: .7em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 510px;
+        margin: 0.5em auto;
+        margin-top:  0;
+        .result{
+            width: auto;
+            height: 1em;
+            background-color: #8d0e2fab;
+            border-radius: 18px;
             display: flex;
-            position: relative;
-            width: 595px;
-            height: 20%;
-            justify-content: space-between;
-            padding: 0 103px;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 4px 8px;
+            img{
+                height: 100%;
+                width: auto;
+            }
+            span{
+                font-family: monospace;
+                padding-left: 16px;
+            }
+
+            @include respond-to(iphonex) {
+                border-radius: 10px;
+            }
+            @media only screen and (max-width: 550px) {
+                border-radius: 10px;
+            }
+        }
+        @include respond-to(iphonex) {
+            max-width: 840px;
+        }
+        @media only screen and (max-width: 550px) {
+            border-radius: 10px;
         }
     }
 }
