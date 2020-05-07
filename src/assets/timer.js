@@ -1,14 +1,13 @@
 // import {toShakeIt, generateKey, getSuchka, generateCoordinates} from './functions';
-// import {seconds} from './configs';
+import {seconds} from './configs';
 import {sec2time} from './functions';
 
-const seconds = 60;
 const game = document.querySelector('#game');
 
 function TimerTemplate(seconds) {
     const SECONDS = seconds;
     let local_seconds = seconds;
-    let interval;
+    let interval, queueInterval, queueOfPluses = [];
     let timer, span, plusElementsParent;
     this.createTimerElemnt = () => {
         timer = document.createElement('div');
@@ -86,6 +85,27 @@ function TimerTemplate(seconds) {
 
     });
 
+    const startQueueRecursive = () => {
+        if (!queueOfPluses.length) {
+            // this.deleteQueueInterval();
+            return;
+        }
+        let {promise, param} = queueOfPluses[0];
+
+        promise(param).then( () => {
+            queueOfPluses.shift();
+            startQueueRecursive();
+        }).catch(message => {
+            console.info(message);
+            queueOfPluses.shift();
+        });
+    };
+
+    this.addToQueue = (toPlusSecondPromise) => {
+        queueOfPluses.push(toPlusSecondPromise);
+        startQueueRecursive();
+    };
+
     this.setOneEnded();
     return this;
 };
@@ -97,7 +117,9 @@ window.plusSeconds = timer.plusSeconds;
 
 export const Timer = {
     reset: timer.reset,
-    plusSeconds: timer.plusSeconds,
+    plusSeconds: (seconds) => {
+        timer.addToQueue({promise : timer.plusSeconds, param : seconds});
+    },
     start: timer.start,
     onEnd: timer.setOneEnded,
 };

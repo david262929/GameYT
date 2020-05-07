@@ -6,41 +6,54 @@ const game = document.querySelector('#game');
 function ResultsTemplate() {
     let resultsParentELement, results = [];
 
-    this.generateResultsElement = () => {
+    this.getKey = (type) =>{
+        return `type_${type}`;
+    }
+
+    this.generateResultsElements = () => resultsToShow.forEach(type => {
+        const result = {};
+        let resultElement = document.createElement('div');
+        resultElement.classList.add('result');
+        resultsParentELement.appendChild(resultElement);
+
+        result.resultElement = resultElement;
+
+        let img = document.createElement('img');
+
+        img.src = cellImages[type - 1];
+        resultElement.appendChild(img);
+
+        let span = document.createElement('span');
+        span.innerHTML = '0';
+        span.dataset.count = 0;
+        result.span = span;
+        resultElement.appendChild(span);
+
+        results[ this.getKey(type) ] = result;
+    });
+
+    this.generateResultsMainElement = () => {
         resultsParentELement = document.createElement('div');
         resultsParentELement.classList.add('results');
 
-        resultsToShow.forEach(type => {
-            const result = {};
-            let resultElement = document.createElement('div');
-            resultElement.classList.add('result');
-            resultsParentELement.appendChild(resultElement);
-
-            result.resultElement = resultElement;
-
-            let img = document.createElement('img');
-            img.src = cellImages[--type];
-            resultElement.appendChild(img);
-
-            let span = document.createElement('span');
-            span.innerHTML = '0';
-            result.span = span;
-            resultElement.appendChild(span);
-
-            results.push(result);
-        });
-
+        this.generateResultsElements();
         return resultsParentELement;
     };
 
-    this.add = () => {
-
+    this.add = (type) => {
+        const result = results[this.getKey(type)];
+        if(!result){
+            return;
+        }
+        let count = +result.span.dataset.count;
+        count += 1;
+        result.span.dataset.count = count;
+        result.span.innerHTML = count;
     };
 
     this.reset = (_span = false) => {
-        if (!timer) {
-            this.createTimerElemnt();
-        }
+        resultsParentELement.innrHTML = ``;
+        this.generateResultsElements();
         return _span ? span : timer;
     };
 
@@ -50,7 +63,7 @@ function ResultsTemplate() {
 };
 
 const results = new ResultsTemplate(seconds);
-game.appendChild(results.generateResultsElement());
+game.appendChild(results.generateResultsMainElement());
 
 export const Results = {
     add : results.add,
