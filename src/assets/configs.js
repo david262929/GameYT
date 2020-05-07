@@ -1,3 +1,3 @@
-export const width = 7;
-export const height = 7;
+export const width = 6;
+export const height = 8;
 export const boomMinimumLimit = 3;

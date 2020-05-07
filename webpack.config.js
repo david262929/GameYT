@@ -1,6 +1,7 @@
 const EXPORT_PATH = './dist';
 const EXPORT_FILE_NAME = 'app.min.js';
-const TEMPLATE_HTML = "./public/index.html";
+const PUBLIC_PATH = "./public";
+const TEMPLATE_HTML = `${PUBLIC_PATH}/index.html`;
 
 const MODE = process.env.NODE_ENV || 'development';
 const PATH = require('path');
@@ -61,6 +62,14 @@ let config = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                loader: 'file-loader',
+                options: {
+                    outputPath : PUBLIC_PATH,
+                    publicPath : PUBLIC_PATH,
+                },
             },
         ]
     }

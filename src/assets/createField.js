@@ -1,4 +1,5 @@
 import {toShakeIt, generateKey, getSuchka, generateCoordinates} from './functions';
+import {width, height} from './configs';
 
 function CellTemplate (cell, inner, x, y) {
     this.element = cell;
@@ -69,7 +70,7 @@ export const createField = () => {
 
     const cells = [];
 
-    generateCoordinates(size.height, size.width).forEach(function (point) {
+    generateCoordinates(width, height).forEach( (point) => {
         const {x, y} = point;
 
         const cell = document.createElement("div");

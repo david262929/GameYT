@@ -1,0 +1,4 @@
+@import "./mixins";
+#loading{
+  @include fullScreen;
+}

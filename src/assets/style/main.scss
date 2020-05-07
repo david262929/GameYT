@@ -1,0 +1,21 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.display_none {
+    display: none;
+}
+@import "./components/game", "./components/loading", "./components/start";
+
+

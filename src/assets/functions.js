@@ -1,5 +1,5 @@
 import {width, height} from './configs';
-
+// import
 
 export const generateKey = (x, y) => {
     return `x${x}_y${y}`;
@@ -65,7 +65,7 @@ export const toShakeIt = (cell) => {
     });
 };
 
-export const generateCoordinates = (height, width) => {
+export const generateCoordinates = (width, height) => {
     const result = [];
 
     const columns  = [...Array(height).fill(0)].map((x, index)=>index);
@@ -74,4 +74,8 @@ export const generateCoordinates = (height, width) => {
     columns.forEach( y => rows.forEach(x => result.push({x,y} ) ) );
 
     return result;
+};
+
+export const addImages = () => {
+
 };

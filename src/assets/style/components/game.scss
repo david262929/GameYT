@@ -1,0 +1,187 @@
+@import "./mixins";
+//@import "@img/background.jpg";
+
+#game{
+    @include fullScreen;
+    .gameArea {
+        display: flex;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        justify-content: flex-start;
+        align-items: center;
+        background-size: cover;
+        flex-direction: column;
+        overflow: hidden;
+        //background-image: url("./background.jpg");
+
+
+        .field {
+            display: flex;
+            position: relative;
+            font-size: 85px;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            border-radius: 2%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            .cell {
+                display: flex;
+                position: absolute;
+                width: 1em;
+                height: 1em;
+                align-items: center;
+                justify-content: center;
+                border-radius: 30%;
+                overflow: hidden;
+                cursor: pointer;
+                transition: all 500ms;
+                transform: rotateZ(0deg);
+                background-color: #8d0e2fab;
+
+                &:hover {
+                    opacity: 0.75;
+                }
+
+                &.shake {
+                    animation: shake .5s 2;
+                }
+
+                &.suchka {
+                    background-color: beige;
+                }
+
+                &.active {
+                    border: 1px solid greenyellow;
+                    transform: rotateZ(360deg);
+
+                    .pic {
+                        /*transform: scale(.85);*/
+                    }
+                }
+
+                .pic {
+                    width: 100%;
+                    height: 100%;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    transition: all 250ms;
+                    //width: 120px;
+                    //height: 120px;
+                    //transform: scale(0.7083333333333334);
+                    max-width: 100%;
+                    //background-size: 100%;
+
+                    //&[data-pic-id="1"] {
+                    //    background-position: 0 0%;
+                    //}
+                    //
+                    //&[data-pic-id="2"] {
+                    //    background-position: 0 20%;
+                    //}
+                    //
+                    //&[data-pic-id="3"] {
+                    //    background-position: 0 40%;
+                    //}
+                    //
+                    //&[data-pic-id="4"] {
+                    //    background-position: 0 60%;
+                    //}
+                    //
+                    //&[data-pic-id="5"] {
+                    //    background-position: 0 80%;
+                    //}
+                    //
+                    //&[data-pic-id="6"] {
+                    //    background-position: 0 100%;
+                    //}
+
+                    &[data-pic-id]:not([data-pic-id="-1"]) {
+                        animation: pic .5s linear;
+                    }
+                }
+
+                @keyframes shake {
+                    0% {
+                        transform: translate(1px, 1px) rotate(0deg);
+                    }
+
+                    10% {
+                        transform: translate(-1px, -2px) rotate(-1deg);
+                    }
+
+                    20% {
+                        transform: translate(-3px, 0px) rotate(1deg);
+                    }
+
+                    30% {
+                        transform: translate(3px, 2px) rotate(0deg);
+                    }
+
+                    40% {
+                        transform: translate(1px, -1px) rotate(1deg);
+                    }
+
+                    50% {
+                        transform: translate(-1px, 2px) rotate(-1deg);
+                    }
+
+                    60% {
+                        transform: translate(-3px, 1px) rotate(0deg);
+                    }
+
+                    70% {
+                        transform: translate(3px, 1px) rotate(-1deg);
+                    }
+
+                    80% {
+                        transform: translate(-1px, -1px) rotate(1deg);
+                    }
+
+                    90% {
+                        transform: translate(1px, 2px) rotate(0deg);
+                    }
+
+                    100% {
+                        transform: translate(1px, -2px) rotate(-1deg);
+                    }
+                }
+
+                @keyframes pic {
+                    0% {
+                        transform: translate(0, -100%);
+                    }
+
+                    100% {
+                        transform: translate(0, 0);
+                    }
+                }
+            }
+        }
+
+
+        .time {
+            display: flex;
+            position: relative;
+            width: 50%;
+            height: 100%;
+            color: white;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: 40px;
+            text-align: center;
+            font-family: "Times New Roman", Times, serif;
+        }
+        .info {
+            display: flex;
+            position: relative;
+            width: 595px;
+            height: 20%;
+            justify-content: space-between;
+            padding: 0 103px;
+        }
+    }
+}
