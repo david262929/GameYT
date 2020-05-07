@@ -19,7 +19,9 @@ let config = {
     resolve: {
         extensions: ['.js', '.scss', '.css'],
         alias: {
-            '@modules': PATH.resolve(__dirname, 'src/modules'),
+            '@assests': PATH.resolve(__dirname, 'src/assests'),
+            '@style': PATH.resolve(__dirname, 'src/assests/style'),
+            '@img': PATH.resolve(__dirname, 'src/assests/img'),
             '@': PATH.resolve(__dirname, 'src'),
         }
     },
