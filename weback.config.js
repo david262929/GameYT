@@ -31,7 +31,7 @@ let config = {
         },
     },
     devServer: {
-        port: 4200,
+        port: 4201,
     },
     plugins: [
         new HTMLWebpackPlugin({
