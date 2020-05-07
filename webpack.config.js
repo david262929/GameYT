@@ -19,9 +19,9 @@ let config = {
     resolve: {
         extensions: ['.js', '.scss', '.css'],
         alias: {
-            '@assests': PATH.resolve(__dirname, 'src/assests'),
-            '@style': PATH.resolve(__dirname, 'src/assests/style'),
-            '@img': PATH.resolve(__dirname, 'src/assests/img'),
+            '@assets': PATH.resolve(__dirname, 'src/assets'),
+            '@style': PATH.resolve(__dirname, 'src/assets/style'),
+            '@img': PATH.resolve(__dirname, 'src/assets/img'),
             '@': PATH.resolve(__dirname, 'src'),
         }
     },
@@ -31,7 +31,7 @@ let config = {
         },
     },
     devServer: {
-        port: 4201,
+        port: 4202,
     },
     plugins: [
         new HTMLWebpackPlugin({
