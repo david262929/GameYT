@@ -2,6 +2,13 @@ export const width = 6;
 export const height = 8;
 export const seconds = 60;
 export const resultsToShow = [1,3,6];
+export const eachTypeResultValue = [1,3,6];
+eachTypeResultValue[1] = 1;
+eachTypeResultValue[2] = 1;
+eachTypeResultValue[3] = 2;
+eachTypeResultValue[4] = 1;
+eachTypeResultValue[5] = 5;
+eachTypeResultValue[6] = 2;
 export const boomMinimumLimit = 3;
 
 

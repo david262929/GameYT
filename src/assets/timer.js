@@ -2,7 +2,7 @@
 // import {seconds} from './configs';
 import {sec2time} from './functions';
 
-const seconds = 13;
+const seconds = 60;
 const game = document.querySelector('#game');
 
 function TimerTemplate(seconds) {

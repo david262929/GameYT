@@ -38,7 +38,7 @@ function CellTemplate (cell, inner, x, y) {
         return this;
     };
 
-    this.destroy = function () {
+    this.destroyCell = function () {
         this.inner.dataset.picId = '-1';
         return this;
     };

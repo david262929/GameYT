@@ -5,7 +5,7 @@ const loading = document.querySelector('#loading');
 start.style.display = loading.style.display = 'none';
 
 import {toShakeIt, getSuchka, generateKey} from './assets/functions';
-import {width, height, boomMinimumLimit} from './assets/configs';
+import {width, height, boomMinimumLimit, eachTypeResultValue} from './assets/configs';
 import {createField} from './assets/createField';
 import {Timer} from './assets/timer';
 import {Results} from './assets/results';
@@ -142,7 +142,11 @@ const getBoomerables = (cell) => {
 };
 
 const boom = (cell) => {
-    cell.destroy();
+    const destroingCellId = cell.getPicID();
+    Timer.plusSeconds(eachTypeResultValue[destroingCellId]);
+    Results.add(destroingCellId);
+
+    cell.destroyCell();
     let topCellsOfCurrent = getSuchka( cell.getX(), cell.getY(), Infinity, '', 'top');
     topCellsOfCurrent = topCellsOfCurrent['top'] || [];
 
