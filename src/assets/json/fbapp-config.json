@@ -1,0 +1,17 @@
+{
+  "instant_games": {
+    "platform_version": "porndznakan_version_json",
+    "custom_update_templates": {
+      "play_turn": {
+        "example": "Kaghal sksec"
+      },
+      "match_won": {
+        "example": "Kreeec"
+      },
+      "match_tie": {
+        "example": "Of esim e"
+      }
+    },
+    "navigation_menu_version": "NAV_FLOATING"
+  }
+}
