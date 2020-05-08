@@ -11,7 +11,7 @@ $ yarn dev
 $ yarn dev --watch     //  Watch for changes and recompile
 ```
 ```bash
-$ yarn dev-server      //  Open host "localhost:4200" with watch mode      
+$ yarn dev-server      //  Open host "localhost:4202" with watch mode      
 ```
 - Production
 ```bash 
