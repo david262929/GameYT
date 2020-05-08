@@ -18,7 +18,6 @@ field_element.style.width = `${width}em`;
 field_element.style.height = `${height}em`;
 
 
-
 const swapCells = (cur, prev, timer = 0) => new Promise(resolve => {
     let curX = cur.getX(), curY = cur.getY(), prevX = prev.getX(), prevY = prev.getY();
     [cells[generateKey(curX, curY)], cells[generateKey(prevX, prevY)]] = [cells[generateKey(prevX, prevY)], cells[generateKey(curX, curY)]];
@@ -143,66 +142,85 @@ const getBoomerables = (cell) => {
 
 const boom = (cell) => {
     const destroingCellId = cell.getPicID();
-    if( eachTypeResultValue[destroingCellId] ){
+    if (eachTypeResultValue[destroingCellId]) {
         Timer.plusSeconds(eachTypeResultValue[destroingCellId]);
     }
     Results.add(destroingCellId);
 
     cell.destroyCell();
-    let topCellsOfCurrent = getSuchka( cell.getX(), cell.getY(), Infinity, '', 'top');
+
+    const boomedData = {
+        oldCoordinate: {
+            x: cell.getX(),
+            y: cell.getY(),
+        },
+        cell,
+    };
+
+    let topCellsOfCurrent = getSuchka(boomedData.oldCoordinate.x, boomedData.oldCoordinate.y, Infinity, '', 'top');
     topCellsOfCurrent = topCellsOfCurrent['top'] || [];
 
     topCellsOfCurrent.forEach(topCellOfCurrent => {
         swapCells(topCellOfCurrent, cell);
     });
 
+    return boomedData;
+};
+
+const boomedsRecruite = (boomedData) => {
+    const { oldCoordinate, cell } = boomedData;
+
+    let bottomCellsOfBoomedCell = getSuchka(cell.getX(), cell.getY(), oldCoordinate.y, '', 'bottom' );
+    bottomCellsOfBoomedCell = bottomCellsOfBoomedCell['bottom'] || [];
+
+    bottomCellsOfBoomedCell.unshift(cell);
+
+    bottomCellsOfBoomedCell.forEach( bottomCellOfBoomedCell => {
+        setTimeout(() => {
+            initBoom(bottomCellOfBoomedCell);
+        }, 250);
+    });
 };
 
 const initBoom = (...cellsForcheck) => {
     let haveBoomed = false;
     let boomedMainCells = [];
-    let boomeds = [];
+    let boomedsData = [];
 
     cellsForcheck.forEach((cell, index) => {
         const boomerables = getBoomerables(cell);
 
         if (index === cellsForcheck.length - 1 && haveBoomed) {
             // console.log(boomedMainCells);
-            boomedMainCells.forEach(boomedMainCell => {
-                boom(boomedMainCell);
-                boomeds.push(boomedMainCell);
-            });
+            boomedMainCells.forEach(boomedMainCell => boomedsData.push( boom(boomedMainCell) ) );
         }
 
         if (!boomerables['horizontal'] && !boomerables['vertical']) {
             return;
         }
         haveBoomed = true;
-
         Object.keys(boomerables).forEach(key => {
             const lineOfBoomerables = boomerables[key];
             lineOfBoomerables.forEach(boomerable => {
                 if (boomerable == cell) {
                     return;
                 }
-                boom(boomerable);
-                boomeds.push(boomerable);
+                boomedsData.push( boom(boomerable) )
             });
         });
         if (index === cellsForcheck.length - 1 && haveBoomed) {
-            boom(cell);
-            boomeds.push(cell);
+            boomedsData.push( boom(cell) )
         } else {
             boomedMainCells.push(cell);
         }
 
     });
 
-    boomeds.forEach(boomed => {
-        boomed.element.classList.add('suchka');
+    boomedsData.forEach(boomedData => {
         setTimeout(() => {
-            boomed.randomPic();
-            initBoom(boomed);
+            // boomedData.cell.element.classList.add('suchka');
+            boomedData.cell.randomPic();
+            boomedsRecruite(boomedData);
         }, 250);
     });
 
@@ -212,7 +230,7 @@ const initBoom = (...cellsForcheck) => {
 
 window.addEventListener('load', () => {
     document.body.style.display = 'flex';
-    setTimeout( Timer.start, 200);
+    setTimeout(Timer.start, 200);
 
     field_element.addEventListener("click", function (event) {
         const {target} = event;
