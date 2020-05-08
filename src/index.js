@@ -1,8 +1,7 @@
 const game = document.querySelector('#game');
 const start = document.querySelector('#start');
-const loading = document.querySelector('#loading');
 
-start.style.display = loading.style.display = 'none';
+start.style.display = 'none';
 
 import {toShakeIt, getSuchka, generateKey} from './assets/functions';
 import {width, height, boomMinimumLimit, eachTypeResultValue} from './assets/configs';
