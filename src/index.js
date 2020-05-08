@@ -143,7 +143,9 @@ const getBoomerables = (cell) => {
 
 const boom = (cell) => {
     const destroingCellId = cell.getPicID();
-    Timer.plusSeconds(eachTypeResultValue[destroingCellId]);
+    if( eachTypeResultValue[destroingCellId] ){
+        Timer.plusSeconds(eachTypeResultValue[destroingCellId]);
+    }
     Results.add(destroingCellId);
 
     cell.destroyCell();
@@ -197,7 +199,7 @@ const initBoom = (...cellsForcheck) => {
     });
 
     boomeds.forEach(boomed => {
-        // boomed.element.classList.add('suchka');
+        boomed.element.classList.add('suchka');
         setTimeout(() => {
             boomed.randomPic();
             initBoom(boomed);

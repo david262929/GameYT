@@ -1,8 +1,8 @@
 export const width = 6;
 export const height = 8;
-export const seconds = 60;
-export const resultsToShow = [1,3,6];
-export const eachTypeResultValue = [1,3,6];
+export const seconds = 30;
+export const resultsToShow = [1];//,2,3,4,5,6
+export const eachTypeResultValue = [];
 eachTypeResultValue[1] = 1;
 eachTypeResultValue[2] = 1;
 eachTypeResultValue[3] = 1;
