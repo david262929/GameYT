@@ -51,3 +51,13 @@ style.innerHTML = `
         background-image: url(${suka6});
     }
 `;
+
+
+// import suka111 from '@json/config.template.json';
+// console.log(suka111);
+// require('./json/config.template.json');
+
+// console.log(l);
+
+
+// import './json/fbapp-config.json';
