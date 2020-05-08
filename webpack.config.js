@@ -21,6 +21,7 @@ let config = {
         extensions: ['.js', '.scss', '.css'],
         alias: {
             '@assets': PATH.resolve(__dirname, 'src/assets'),
+            '@json': PATH.resolve(__dirname, 'src/assets/json'),
             '@style': PATH.resolve(__dirname, 'src/assets/style'),
             '@img': PATH.resolve(__dirname, 'src/assets/img'),
             '@': PATH.resolve(__dirname, 'src'),
@@ -64,13 +65,32 @@ let config = {
                 ],
             },
             {
-                test: /\.(png|jpe?g|gif)$/i,
+                test: /\.(png|jpe?g|gif|json)$/i,
                 loader: 'file-loader',
-                options: {
-                    outputPath : PUBLIC_PATH,
-                    publicPath : PUBLIC_PATH,
-                },
+                // options: {
+                //     outputPath: PUBLIC_PATH,
+                //     publicPath: PUBLIC_PATH,
+                // },
             },
+            // {
+            //     test: /\.(json)$/,
+            //     // loader: 'file-loader',
+            //     // options: {
+            //     //     outputPath: PUBLIC_PATH,
+            //     //     publicPath: PUBLIC_PATH,
+            //     // },
+            //     // use: [
+            //     //     {
+            //     //         loader: 'file-loader',
+            //     //         options: {},
+            //     //     },
+            //     // ],
+            //     // options: {name: '[name].[ext]'},
+            // }
+            // {
+            //     test: /\.(json)$/,
+            //     loader: "file-loader"
+            // }
         ]
     }
 };
