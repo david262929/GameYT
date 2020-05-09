@@ -275,7 +275,6 @@ export const Game = {
     },
     stop : () => {
         Timer.stop();
-        gameElement.classList.add('hideIcons');
     },
     getMenuOpener: () => {
         return gameElement.querySelector('.menuOpener');

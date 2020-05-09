@@ -10,7 +10,7 @@ const start = (info) => {
         .on('pause', Game.stop)
         .on('try-again', () => Game.reset().then(Game.init).then(Menu.hide).then(Game.start));
 
-    Game.on('time-ended', Menu.setState('time-ended').show);
+    Game.on('time-ended', () => Menu.setState('time-ended').show());
 
 };
 
@@ -23,9 +23,7 @@ window.addEventListener('load', () => {
         loadImages(
             allImages,
             (progress) => FBInstant.setLoadingProgress(progress),
-            () => {
-                Game.init().then(start);
-            });
+            () => Game.init().then(start));
         return;
     }
 
