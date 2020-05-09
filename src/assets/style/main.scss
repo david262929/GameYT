@@ -1,3 +1,8 @@
+@import "./components/mixins";
+*{
+    box-sizing: border-box;
+    transition: .2s ease;
+}
 html {
     height: 100%;
 }
@@ -12,11 +17,28 @@ body {
     height: 100%;
     display: none;
     background-size: cover;
+    font-size: 85px;
+    font-family: monospace;
+    background-size: cover;
+    @include respond-to('max-width:1000px'){
+        font-size: 65px;
+    }
+    @include respond-to('max-width: 981px') {
+        font-size: 60px;
+    }
+    @include respond-to('max-height: 1000px') {
+        font-size: 60px;
+    }
+    @include respond-to('max-height: 751px') {
+        font-size: 50px;
+    }
+    @include respond-to('max-height: 660px') {
+        font-size: 45px;
+    }
 }
-
 .display_none {
     display: none;
 }
-@import "./components/game", "./components/start";
+@import "./components/game", "components/menu";
 
 

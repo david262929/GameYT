@@ -1,6 +1,13 @@
 // import {toShakeIt, generateKey, getSuchka, generateCoordinates} from './functions';
-import {seconds} from './configs';
+import {gameElement, seconds} from './configs';
 import {sec2time} from './functions';
+
+const events = {};
+
+const call = (key) => {
+    const playCallbacks = events[key] || [];
+    playCallbacks.forEach(playCallback => playCallback());
+};
 
 const game = document.querySelector('#game');
 
@@ -9,6 +16,7 @@ function TimerTemplate(seconds) {
     let local_seconds = seconds;
     let interval, queueInterval, queueOfPluses = [];
     let timer, span, plusElementsParent;
+
     this.createTimerElemnt = () => {
         timer = document.createElement('div');
         timer.classList.add('timer');
@@ -29,34 +37,42 @@ function TimerTemplate(seconds) {
         return timer;
     };
 
-
     this.start = () => {
+
         if (interval) {
             return this;
         }
-        span.textContent = sec2time(seconds);
+        span.textContent = sec2time(local_seconds);
         interval = setInterval(() => {
             span.textContent = sec2time(local_seconds);
             local_seconds -= .25;
             if (local_seconds < 0) {
                 clearInterval(interval);
-                this.onEnd();
+                interval = null;
+                call('end');
                 return;
             }
         }, 250);
         return this;
     };
 
-    this.reset = () => {
-        if (this.interval) {
-            clearInterval(interval);
+    this.stop = () => {
+        if (!interval) {
+            return this;
         }
-        this.start(SECONDS);
-        return +this.inner.dataset.picId;
+        clearInterval(interval);
+        interval = null;
+        return this;
     };
 
-    this.setOneEnded = (callback = () => {}) => {
-        this.onEnd = callback;
+    this.reset = () => {
+        clearInterval(interval);
+        interval = null;
+        if(timer.parentNode){
+            timer.parentNode.removeChild(timer);
+            timer = null;
+        }
+        local_seconds = SECONDS;
         return this;
     };
 
@@ -106,22 +122,30 @@ function TimerTemplate(seconds) {
         startQueueRecursive();
     };
 
-    this.setOneEnded();
     return this;
 };
 
 const timer = new TimerTemplate(seconds);
-game.appendChild(timer.getTimerElement());
+
 
 window.plusSeconds = timer.plusSeconds;
 
 export const Timer = {
+    on: (eventName, callback) => {
+        const callbackFromEventName = events[eventName] || [];
+        callbackFromEventName.push(callback);
+        events[eventName] = callbackFromEventName;
+        return this;
+    },
     reset: timer.reset,
     plusSeconds: (seconds) => {
         timer.addToQueue({promise : timer.plusSeconds, param : seconds});
     },
     start: timer.start,
-    onEnd: timer.setOneEnded,
+    stop: timer.stop,
+    init : () => {
+        game.appendChild(timer.getTimerElement());
+    },
 };
 
 

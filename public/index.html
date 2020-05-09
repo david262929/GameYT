@@ -7,32 +7,12 @@
         <script src="https://connect.facebook.net/en_US/fbinstant.6.2.js"></script>
     </head>
     <body>
-        <div id="game"></div>
-        <div id="start"></div>
+        <div id="game">
+            <div class="score-menuOpener">
+                <div class="score">SCORE:<span class="score-number">0</span> </div>
+                <span class="menuOpener"></span>
+            </div>
+        </div>
+        <div id="menu"></div>
     </body>
-    <script>
-        FBInstant.initializeAsync().then(() =>{
-            for (var i=0; i < 100; i++) {
-                FBInstant.setLoadingProgress(i);
-            }
-        });
-
-        FBInstant.startGameAsync().then(function() {
-            // Retrieving context and player information can only be done
-            // once startGameAsync() resolves
-            var contextId = FBInstant.context.getID();
-            var contextType = FBInstant.context.getType();
-
-            var playerName = FBInstant.player.getName();
-            var playerPic = FBInstant.player.getPhoto();
-            var playerId = FBInstant.player.getID();
-
-            console.log({contextId,contextType, playerName, playerPic, playerId});
-            // Once startGameAsync() resolves it also means the loading view has
-            // been removed and the user can see the game viewport
-
-            console.log('start suchka');
-            // game.start();
-        });
-    </script>
 </html>

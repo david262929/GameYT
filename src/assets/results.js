@@ -1,7 +1,4 @@
-import {resultsToShow, cellImages} from './configs';
-
-const seconds = 13;
-const game = document.querySelector('#game');
+import {resultsToShow, cellImages, gameElement} from './configs';
 
 function ResultsTemplate() {
     let resultsParentELement, results = [];
@@ -35,6 +32,7 @@ function ResultsTemplate() {
     this.generateResultsMainElement = () => {
         resultsParentELement = document.createElement('div');
         resultsParentELement.classList.add('results');
+        resultsParentELement.dataset.resultsCount = resultsToShow.length;
 
         this.generateResultsElements();
         return resultsParentELement;
@@ -51,21 +49,25 @@ function ResultsTemplate() {
         result.span.innerHTML = count;
     };
 
-    this.reset = (_span = false) => {
-        resultsParentELement.innrHTML = ``;
-        this.generateResultsElements();
-        return _span ? span : timer;
+    this.reset = () => {
+        if(!resultsParentELement) {
+            return;
+        }
+        if(resultsParentELement.parentNode){
+            resultsParentELement.parentNode.removeChild(resultsParentELement);
+        }
     };
-
 
 
     return this;
 };
 
-const results = new ResultsTemplate(seconds);
-game.appendChild(results.generateResultsMainElement());
+const results = new ResultsTemplate();
 
 export const Results = {
+    init : () => {
+        gameElement.appendChild(results.generateResultsMainElement());
+    },
     add : results.add,
     reset : results.reset,
 };

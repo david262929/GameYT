@@ -67,6 +67,8 @@ function CellTemplate (cell, inner, x, y) {
 export const createField = () => {
     const field_element = document.createElement("div");
     field_element.classList.add("field");
+    field_element.classList.add('gameWidth');
+    field_element.classList.add('gameHeight');
 
     window.cells = [];
 

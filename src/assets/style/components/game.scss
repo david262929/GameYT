@@ -1,24 +1,24 @@
 @import "./mixins";
 //@import "@img/background.jpg";
-
-body{
-    @include respond-to('max-width:1000px'){
-        font-size: 65px;
-    }
-}
 #game{
     @include fullScreen;
+    height: auto;
     justify-content: space-evenly;
     align-items: center;
-    background-size: cover;
     flex-direction: column;
-    font-size: 85px;
     color: white;
-    @media only screen and (max-width: 981px) {
-        font-size: 60px;
-    }
+    padding: .1em 0;
     //background-image: url("./background.jpg");
-
+    &.hideIcons{
+        .field{
+            .cell{
+                .pic{
+                    transform: translate(0, -100%);
+                    animation: none!important;
+                }
+            }
+        }
+    }
 
     .field {
         display: flex;
@@ -30,8 +30,9 @@ body{
         border-radius: 2%;
         background-size: contain;
         background-repeat: no-repeat;
-        margin-bottom: 1em;
         .cell {
+            cursor: pointer;
+            @include click-effect;
             display: flex;
             position: absolute;
             width: 1em;
@@ -44,6 +45,8 @@ body{
             transform: scale(.95)  rotateZ(0deg);
             background-color: #8d0e2fab;
             border-radius: 18px;
+            position: absolute;
+
             &.gold{
                 background-color: gold;
             }
@@ -59,7 +62,10 @@ body{
             }
 
             &.shake {
-                animation: shake .5s 2;
+                animation: shake .25s 2;
+                &:after{
+                    animation-duration: 1.5s;
+                }
             }
 
             &.suchka {
@@ -75,6 +81,7 @@ body{
             }
 
             .pic {
+                z-index: 1;
                 width: 80%;
                 height: 100%;
                 background-size: contain;
@@ -174,13 +181,52 @@ body{
         }
     }
 
+    .score-menuOpener{
+        display: flex;
+        position: relative;
+        width: 100%;
+        height: 1em;
+        margin: 0 auto;
+        margin-bottom: 0.5em;
+        font-size: 0.7em;
+        color: white;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        transition: 0.5s ease-out;
+
+        .score{
+
+        }
+        .menuOpener{
+            cursor: pointer;
+            width: .8em;
+            height: .8em;
+            position: relative;
+            margin: .1em .2em;
+            &:before, &:after{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 33%;
+                height: 100%;
+                background-color: white;
+                content: "";
+            }
+            &:after{
+                left: inherit;
+                right: 0;
+            }
+        }
+    }
 
     .timer {
         display: flex;
         position: relative;
         width: auto;
         height: 1em;
-        margin: .5em auto;
+        margin: 0 auto;
+        margin-bottom: 0.5em;
         font-size: .7em;
         color: white;
         justify-content: space-evenly;
@@ -238,6 +284,13 @@ body{
         max-width: 510px;
         flex-wrap: wrap;
         margin-top:  0;
+        &[data-results-count]{
+            &[data-results-count="5"], &[data-results-count="6"]{
+                .result{
+                    width: 26%;
+                }
+            }
+        }
         .result{
             width: auto;
             height: 1em;
@@ -256,6 +309,7 @@ body{
             span{
                 font-family: monospace;
                 padding-left: 16px;
+                font-size: .7em;
             }
 
             @include respond-to(iphonex) {

@@ -1,4 +1,4 @@
-import {width, height} from './configs';
+import {width, height, gameElement} from './configs';
 
 export const generateKey = (x, y) => {
     return `x${x}_y${y}`;
@@ -81,4 +81,46 @@ export const sec2time = (_seconds) => {
         seconds = Math.floor(time - minutes * 60);
 
     return pad(minutes, 2) + ':' + pad(seconds, 2);
+};
+
+const loadImage = (url) => new Promise (resolve => {
+    var newImg = new Image;
+    newImg.src = url;
+    newImg.onload = resolve;
+});
+
+export const loadImages = (imageUrls = [], progressCallback, progressEndedCallBack) => {
+    const maxProgressFB = 95;
+    if(!imageUrls.length){
+        progressCallback(maxProgressFB);
+        return;
+    }
+    const imagePromises = imageUrls.map( imageUrl => loadImage(imageUrl));
+
+    let progress = 0;
+    const eachImagePercent = parseInt(95 / imagePromises.length) + 1;
+
+    const loadedImage = (message) => {
+        if(!message){
+            console.info(message);
+        }
+        imagePromises.shift();
+        progress += eachImagePercent;
+
+        if(progress > 95){
+            progressEndedCallBack()
+        }
+
+        progressCallback(progress);
+        call();
+    };
+
+    const call = () => {
+        if (!imagePromises.length) {
+            return;
+        }
+        imagePromises[0].then( loadedImage ).catch( loadedImage );
+    };
+
+    call();
 };

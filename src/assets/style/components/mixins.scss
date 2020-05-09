@@ -60,3 +60,43 @@
     }
   }
 }
+
+@mixin click-effect {
+  position: relative;
+  &:after {
+    content: "";
+    background: white;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all 0.8s;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    z-index: 0;
+  }
+  &.active:after, &.shake:after, &:active:after {
+    opacity: 1;
+    width: 0;
+    height: 0;
+    animation: active-click .8s ease 1;
+  }
+  @keyframes active-click {
+    0%, 100%{
+      width: 0%;
+      height: 0%;
+      opacity: 0;
+    }
+    50%{
+      opacity: .5;
+    }
+    99.9%{
+      width: 200%;
+      height: 200%;
+      opacity: 0;
+    }
+  }
+}

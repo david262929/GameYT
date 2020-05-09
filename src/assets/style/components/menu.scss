@@ -1,0 +1,77 @@
+@import "./mixins";
+#menu{
+  @include fullScreen;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  transition: .8s ease;
+  //transition: .8s cubic-bezier(.5, 0, 0, 2.2);
+  //transition: .8s cubic-bezier(0, 0, 0, 1.8);
+  transform: translate(0, 0%);
+  color: white;
+  &.slideUp{
+    transform: translate(0, -100%);
+  }
+  &.first-menu{
+    .content{
+      height: 60%;
+      justify-content: space-between;
+      .buttons{
+        span:not(.play){
+          display: none;
+        }
+        .play{
+          display: block;
+          padding: 0.2em 0.4em;
+        }
+      }
+    }
+  }
+  &.time-ended{
+    .content{
+      height: 60%;
+      justify-content: space-between;
+      .buttons{
+        span:not(.try-again){
+          display: none;
+        }
+        .try-again{
+          display: block;
+        }
+      }
+    }
+  }
+  .content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .logo{
+      width: 4em;
+      height: 4em;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    .buttons{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      //width: ;
+      span{
+        cursor: pointer;
+        background-color: #8d0e2fab;
+        padding: 4px 8px;
+        padding: .1em .2em;
+        border-radius: 10px;
+        &.play{
+          display: none;
+        }
+        &.resume{
+          margin: 1em 0;
+        }
+      }
+    }
+  }
+}
