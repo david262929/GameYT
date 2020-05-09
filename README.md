@@ -1,4 +1,4 @@
-# YerevanTonavachar FB Instant Game-
+# YerevanTonavachar FB Instant Game
 
 
 ## Development
