@@ -191,7 +191,6 @@ const initBoom = (...cellsForcheck) => {
         const boomerables = getBoomerables(cell);
 
         if (index === cellsForcheck.length - 1 && haveBoomed) {
-            // console.log(boomedMainCells);
             boomedMainCells.forEach(boomedMainCell => boomedsData.push(boom(boomedMainCell)));
         }
 
@@ -257,7 +256,6 @@ export const Game = {
         resolve();
     }),
     reset: () => new Promise(resolve => {
-        console.log('pah');
         Timer.reset();
         Results.reset();
         gameElement.classList.add('hideIcons');
@@ -267,7 +265,6 @@ export const Game = {
         resolve();
     }),
     start : (callback) => {
-        console.log('start');
         Timer.start();
         gameElement.classList.remove('hideIcons');
         if(callback){
@@ -277,7 +274,6 @@ export const Game = {
         }
     },
     stop : () => {
-        console.log('aaaaa');
         Timer.stop();
         gameElement.classList.add('hideIcons');
     },
