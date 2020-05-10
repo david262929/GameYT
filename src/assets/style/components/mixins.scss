@@ -1,3 +1,41 @@
+@mixin plusTemporary {
+  .plusTemporary{
+    position: absolute;
+    top: -5px;
+    left: calc(100% + 30px);
+    transform: translate(0,+20%);
+    animation:  plusTemporaryAnimateToTop .8s ease 1;
+    @keyframes plusTemporaryAnimateToTop {
+      0% {
+        transform: translate(0,+20%);
+        opacity: 0;
+      }
+      20%, 80%{
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(0,-100%);
+      }
+    }
+  }
+}
+
+@mixin onPlused {
+  &.plused{
+    animation:  plused .4s ease 1;
+
+    @keyframes plused {
+      0%,100% {
+        transform: scale(1);
+      }
+      45%,55% {
+        transform: scale(1.2);
+      }
+    }
+  }
+}
+
 @mixin fullScreen {
   position: fixed;
   display: flex;
