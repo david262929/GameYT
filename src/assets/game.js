@@ -190,39 +190,33 @@ const initBoom = (...cellsForcheck) => {
     cellsForcheck.forEach((cell, index) => {
         const boomerables = getBoomerables(cell);
 
-        if (index === cellsForcheck.length - 1 && haveBoomed) {
-            boomedMainCells.forEach(boomedMainCell => boomedsData.push(boom(boomedMainCell)));
-        }
-
-        if (!boomerables['horizontal'] && !boomerables['vertical']) {
-            return;
-        }
-        haveBoomed = true;
-        Object.keys(boomerables).forEach(key => {
-            const lineOfBoomerables = boomerables[key];
-            lineOfBoomerables.forEach(boomerable => {
-                if (boomerable == cell) {
-                    return;
-                }
-                boomedsData.push(boom(boomerable))
+        if (boomerables['horizontal'] || boomerables['vertical']) {
+            Object.keys(boomerables).forEach(key => {
+                const lineOfBoomerables = boomerables[key];
+                lineOfBoomerables.forEach(boomerable => {
+                    if ( cellsForcheck.includes(boomerable) ) {
+                        boomedMainCells.push(boomerable);
+                        return;
+                    }
+                    haveBoomed = true;
+                    boomedsData.push(boom(boomerable));
+                });
             });
-        });
-        if (index === cellsForcheck.length - 1 && haveBoomed) {
-            boomedsData.push(boom(cell))
-        } else {
-            boomedMainCells.push(cell);
         }
 
+        if (index === cellsForcheck.length - 1 && haveBoomed) {
+            boomedMainCells.forEach(boomedMainCell => {
+                boomedsData.push(boom(boomedMainCell));
+            });
+        }
     });
 
     boomedsData.forEach(boomedData => {
         setTimeout(() => {
-            // boomedData.cell.element.classList.add('suchka');
             boomedData.cell.randomPic();
             boomedsRecruite(boomedData);
         }, 250);
     });
-
 
     return haveBoomed;
 };
