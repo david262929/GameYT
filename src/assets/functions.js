@@ -1,4 +1,4 @@
-import {width, height, gameElement} from './configs';
+import {width, height} from './configs';
 
 export const generateKey = (x, y) => {
     return `x${x}_y${y}`;
@@ -58,9 +58,7 @@ export const getSuchka = ( x, y, distance = Infinity, mode = '', ...ways) => {
 
 export const toShakeIt = ( cell) => {
     const nearLines = getSuchka( cell.getX(), cell.getY(), 1);
-    Object.keys(nearLines).forEach(key => {
-        nearLines[key].forEach( near => near.toShake());
-    });
+    Object.keys(nearLines).forEach(key => nearLines[key].forEach( near => near.toShake()));
 };
 
 export const generateCoordinates = (width, height) => {
@@ -123,4 +121,20 @@ export const loadImages = (imageUrls = [], progressCallback, progressEndedCallBa
     };
 
     call();
+};
+
+export const convertScore = (value, lengthAfterPoint = 2, maxLength = 4) => {
+    let numberName = '';
+    if (value >= 1000000) {
+        numberName = "m";
+        value = +parseFloat(value/1000000).toFixed(lengthAfterPoint)
+    } else if (value >= 1000) {
+        numberName = "k";
+        value = +parseFloat(value/1000).toFixed(lengthAfterPoint);
+    }
+    value = `${value}`.substring(0, maxLength);
+    let lastSymbolIndex = value.length - 1;
+    value = value[lastSymbolIndex] === '.' ? value.substring(0, lastSymbolIndex) : value;
+    value += numberName;
+    return value;
 };

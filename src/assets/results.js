@@ -1,4 +1,5 @@
 import {resultsToShow, cellImages, gameElement} from './configs';
+import {convertScore} from './functions';
 
 function ResultsTemplate() {
     let resultsParentELement, results = [];
@@ -43,10 +44,18 @@ function ResultsTemplate() {
         if(!result){
             return;
         }
-        let count = +result.span.dataset.count;
-        count += 1;
-        result.span.dataset.count = count;
-        result.span.innerHTML = count;
+        const {span} = result;
+        let count = +span.dataset.count;
+        count += 6098700;
+        span.dataset.count = count;
+        const textContent = convertScore(count);
+        document.querySelector('.score-number').innerHTML = textContent;
+        span.innerHTML = textContent;
+        if(textContent.length > 3){
+            result.resultElement.classList.add('moreThen3Symbols');
+        }else{
+            result.resultElement.classList.remove('moreThen3Symbols');
+        }
     };
 
     this.reset = () => {
