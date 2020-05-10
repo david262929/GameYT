@@ -14,7 +14,7 @@ const game = document.querySelector('#game');
 function TimerTemplate(seconds) {
     const SECONDS = seconds;
     let local_seconds = seconds;
-    let interval, queueInterval, queueOfPluses = [];
+    let interval, queueStarted, queueOfPluses = [];
     let timer, span, plusElementsParent;
 
     this.createTimerElemnt = () => {
@@ -77,58 +77,60 @@ function TimerTemplate(seconds) {
     };
 
     this.generatePlusSecondElement = (seconds) => new Promise(resolve => {
-        let _plus = document.createElement('div');
-        _plus.classList.add('_plus');
-        _plus.innerHTML = `+${seconds}`;
-        plusElementsParent.appendChild(_plus);
+        let plusTemporary = document.createElement('div');
+        plusTemporary.classList.add('plusTemporary');
+        plusTemporary.innerHTML = `+${seconds}`;
+        plusElementsParent.appendChild(plusTemporary);
         setTimeout(() => {
-            _plus.parentNode.removeChild(_plus);
+            plusTemporary.parentNode.removeChild(plusTemporary);
             resolve();
-        }, 450); /// 400 is ._plus element _plusAnimateToTop animation duration + 50ms for deletion
+        }, 450); /// 400 is .plusTemporary element plusTemporaryAnimateToTop animation duration + 50ms for deletion
     });
 
-    this.plusSeconds = seconds => new Promise(resolve => {
-        span.classList.remove('plusSeconds');
+    this.plusSeconds = seconds => new Promise( resolve => {
+        span.classList.remove('plused');
         local_seconds += seconds;
         setTimeout(() => {
-            span.classList.add('plusSeconds');
+            span.classList.add('plused');
+            // span.classList.add('plused');
             this.generatePlusSecondElement(seconds);
-
             setTimeout(() => {
                 resolve();
-            }, 200); /// 200 is .plusSeconds element animation duration
-        }, 100 );
+            }, 100); /// 100 is half of .plused element animation duration
+        }, 10 );
 
     });
 
+    // this.set
+
+    const afterQueue = () => {
+        queueStarted = false;
+        queueOfPluses.shift();
+        startQueueRecursive();
+    };
+
     const startQueueRecursive = () => {
-        if (!queueOfPluses.length) {
-            // this.deleteQueueInterval();
+        queueStarted = !!queueOfPluses.length;
+        if (!queueOfPluses.length){
             return;
         }
+
         let {promise, param} = queueOfPluses[0];
 
-        promise(param).then( () => {
-            queueOfPluses.shift();
-            startQueueRecursive();
-        }).catch(message => {
-            console.info(message);
-            queueOfPluses.shift();
-        });
+        promise(param).then( afterQueue );
     };
 
     this.addToQueue = (toPlusSecondPromise) => {
+        if(!queueStarted){
+            startQueueRecursive();
+        }
         queueOfPluses.push(toPlusSecondPromise);
-        startQueueRecursive();
     };
 
     return this;
 };
 
 const timer = new TimerTemplate(seconds);
-
-
-window.plusSeconds = timer.plusSeconds;
 
 export const Timer = {
     on: (eventName, callback) => {
