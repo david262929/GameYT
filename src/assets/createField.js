@@ -48,11 +48,11 @@ function CellTemplate (cell, inner, x, y) {
         setTimeout(() => this.element.classList.add('shake'), 10);
     };
 
-    this.randomPic = () => {
+    this.randomPic = (first = false) => {
         if(this.getPicID() !== -1){
             return;
         }
-        let id =  Math.floor(Math.random() * 6 +1); //first && this.getY() == 1 && this.getX() < 4 ? 1 :
+        let id = Math.floor(Math.random() * 6 +1); // first && this.getY() == 1 && this.getX() < 4 ? 5 :
         this.setPicID(id);
         return this;
     };
@@ -60,7 +60,7 @@ function CellTemplate (cell, inner, x, y) {
     this.setX(x)
         .setY(y)
         .setPicID(-1)
-        .randomPic();
+        .randomPic(true);
     return this;
 };
 
