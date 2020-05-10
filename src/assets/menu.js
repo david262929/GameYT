@@ -41,12 +41,12 @@ function MenuTemplate(menuParentElement, state = 'full') {
 
     this.show = () => new Promise(resolve => {
         menuParentElement.classList.remove('slideUp');
-        setTimeout(resolve, 800);// 800ms is .slideUp animation duration
+        setTimeout(resolve, 400);// 400ms is .slideUp animation duration
     });
 
     this.hide = () => new Promise(resolve => {
         menuParentElement.classList.add('slideUp');
-        setTimeout(resolve, 800);// 800ms is .slideUp animation duration
+        setTimeout(resolve, 400);// 400ms is .slideUp animation duration
     });
 
     this.setMenuOpener = (menuOpenerElement) => {
