@@ -46,10 +46,9 @@ function ResultsTemplate() {
         }
         const {span} = result;
         let count = +span.dataset.count;
-        count += 6098700;
+        count += 1;
         span.dataset.count = count;
         const textContent = convertScore(count);
-        document.querySelector('.score-number').innerHTML = textContent;
         span.innerHTML = textContent;
         if(textContent.length > 3){
             result.resultElement.classList.add('moreThen3Symbols');

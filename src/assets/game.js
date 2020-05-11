@@ -1,4 +1,4 @@
-import {generateKey, getSuchka, toShakeIt} from "@assets/functions";
+import {generateKey, getSuchka, toShakeIt, globalScore} from "@assets/functions";
 import {boomMinimumLimit, eachTypeResultValue, gameElement, height, width} from "@assets/configs";
 import {Timer} from "@assets/timer";
 import {Results} from "@assets/results";
@@ -7,10 +7,11 @@ import {createField} from "@assets/createField";
 let prevCell = null;
 let field_element;
 const events = {};
+const globalScoreElement = gameElement.querySelector('.score-menuOpener .score span.score-number');
 
-const call = (key) => {
+const call = (key, ...parameter) => {
     const playCallbacks = events[key] || [];
-    playCallbacks.forEach(playCallback => playCallback());
+    playCallbacks.forEach(playCallback => playCallback(...parameter));
 };
 
 
@@ -143,7 +144,13 @@ const getBoomerables = (cell) => {
 const boom = (cell) => {
     const destroingCellId = cell.getPicID();
     if (eachTypeResultValue[destroingCellId]) {
-        Timer.plusSeconds(eachTypeResultValue[destroingCellId]);
+        const {seconds, score} = eachTypeResultValue[destroingCellId];
+        if(!!seconds){
+            Timer.plusSeconds(seconds);
+        }
+        if(!!score) {
+            globalScore(globalScoreElement, score);
+        }
     }
     Results.add(destroingCellId);
 
@@ -221,7 +228,9 @@ const initBoom = (...cellsForcheck) => {
     return haveBoomed;
 };
 
-Timer.on('end', () => call('time-ended'));
+Timer.on('end', () => {
+    call('time-ended', globalScoreElement.innerHTML);
+});
 
 export const Game = {
     on: (eventName, callback) => {
@@ -252,6 +261,7 @@ export const Game = {
     reset: () => new Promise(resolve => {
         Timer.reset();
         Results.reset();
+        globalScore(globalScoreElement, 0, 'reset');
         gameElement.classList.add('hideIcons');
         if(field_element.parentNode){
             field_element.parentNode.removeChild(field_element);

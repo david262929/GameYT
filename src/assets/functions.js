@@ -138,3 +138,19 @@ export const convertScore = (value, lengthAfterPoint = 2, maxLength = 4) => {
     value += numberName;
     return value;
 };
+
+export const globalScore = (globalScoreElement, value, mode = 'add') => {
+    let count = +globalScoreElement.dataset.count || 0;
+    switch (mode) {
+        case 'add':
+            count += value;
+            break;
+        case 'reset':
+            count = 0;
+            break;
+        default:
+            return;
+    }
+    globalScoreElement.dataset.count = count;
+    globalScoreElement.innerHTML = convertScore(count);
+};

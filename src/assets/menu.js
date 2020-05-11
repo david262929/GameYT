@@ -10,9 +10,9 @@ const call = (key) => {
 function MenuTemplate(menuParentElement, state = 'full') {
     const self = this;
     this._state;
-    let openerElement, playElement, resumeElement, tryAgainElement;
+    let openerElement, playElement, resumeElement, tryAgainElement, scoreElement;
 
-    this.setState = (state = 'pause') => {
+    this.setState = (state = 'pause', value = '') => {
         this._state = state;
         switch (state) {
             case 'during-game':
@@ -34,6 +34,7 @@ function MenuTemplate(menuParentElement, state = 'full') {
                 menuParentElement.classList.remove('first-menu');
                 menuParentElement.classList.remove('pause');
                 menuParentElement.classList.add('time-ended');
+                scoreElement.innerHTML = `Score: ${value}`;
                 break;
         };
         return this;
@@ -70,6 +71,9 @@ function MenuTemplate(menuParentElement, state = 'full') {
         let buttons = document.createElement('div');
         buttons.classList.add('buttons');
 
+        scoreElement = document.createElement('span');
+        scoreElement.classList.add('score-value');
+
         playElement = document.createElement('span');
         playElement.classList.add('play');
         playElement.innerHTML = 'Play';
@@ -100,6 +104,7 @@ function MenuTemplate(menuParentElement, state = 'full') {
             });
         });
 
+        buttons.appendChild(scoreElement);
         buttons.appendChild(playElement);
         buttons.appendChild(resumeElement);
         buttons.appendChild(tryAgainElement);

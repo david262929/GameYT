@@ -33,10 +33,10 @@
       height: 60%;
       justify-content: space-between;
       .buttons{
-        span:not(.try-again){
+        span:not(.try-again):not(.score-value){
           display: none;
         }
-        .try-again{
+        .try-again, .score-value {
           display: block;
         }
       }
@@ -67,6 +67,12 @@
         border-radius: 10px;
         &.play{
           display: none;
+        }
+        &.score-value{
+          display: none;
+          font-size: .7em;
+          margin-bottom: 1em;
+          background-color: transparent;
         }
         &.resume{
           margin: 1em 0;
