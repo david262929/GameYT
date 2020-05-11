@@ -1,6 +1,6 @@
 export const width = 6;
 export const height = 8;
-export const seconds = 10;
+export const seconds = 30;
 export const resultsToShow = [1,2,3,4,5,6];
 export const eachTypeResultValue = [];
 eachTypeResultValue[1] = {

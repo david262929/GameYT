@@ -192,7 +192,7 @@ const boomedsRecruite = (boomedData) => {
 const initBoom = (...cellsForcheck) => {
     let haveBoomed = false;
     let boomedMainCells = [];
-    let boomedsData = [];
+    let toBoom = [];
 
     cellsForcheck.forEach((cell, index) => {
         const boomerables = getBoomerables(cell);
@@ -206,19 +206,19 @@ const initBoom = (...cellsForcheck) => {
                         return;
                     }
                     haveBoomed = true;
-                    boomedsData.push(boom(boomerable));
+                    toBoom.push(boomerable);
                 });
             });
         }
 
         if (index === cellsForcheck.length - 1 && haveBoomed) {
             boomedMainCells.forEach(boomedMainCell => {
-                boomedsData.push(boom(boomedMainCell));
+                toBoom.push(boomedMainCell);
             });
         }
     });
 
-    boomedsData.forEach(boomedData => {
+    toBoom.map(item => boom(item)).forEach(boomedData => {
         setTimeout(() => {
             boomedData.cell.randomPic();
             boomedsRecruite(boomedData);
