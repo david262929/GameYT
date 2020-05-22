@@ -7,7 +7,6 @@ export const generateKey = (x, y) => {
 export const getSuchka = ( x, y, distance = Infinity, mode = '', ...ways) => {
     if(!ways.length){
         ways = ['top', 'bottom', 'left', 'right'];
-
     }
     const current_cell = cells[generateKey( x, y )];
     if(!current_cell){

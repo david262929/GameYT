@@ -1,4 +1,4 @@
-import { generateKey, generateCoordinates} from './functions';
+import {generateKey, generateCoordinates, getSuchka} from './functions';
 import {width, height} from './configs';
 
 function CellTemplate (cell, inner, x, y) {
@@ -48,19 +48,48 @@ function CellTemplate (cell, inner, x, y) {
         setTimeout(() => this.element.classList.add('shake'), 10);
     };
 
-    this.randomPic = (first = false) => {
+    const generateRandomID = (excludeIds = []) => {
+        const ids = Array(6).fill().map( (_, i) => ++i).filter( id => !excludeIds.includes(id));
+        return ids[Math.floor(Math.random() * ids.length)];
+    };
+
+    this.firstRandomPic = () => {
         if(this.getPicID() !== -1){
             return;
         }
-        let id = Math.floor(Math.random() * 6 +1); // first && this.getY() == 1 && this.getX() < 4 ? 5 :
+        const nearbieLines = getSuchka(this.getX(), this.getY(), 2, 'only-types', 'top', 'left');
+        const excludeIds = [];
+
+        Object.keys(nearbieLines).forEach(key => {
+            let nearId;
+            nearbieLines[key].forEach( _nearId => {
+                if(!nearId){
+                    nearId = _nearId;
+                    return;
+                }
+                if( nearId == _nearId ){
+                    excludeIds.push(nearId);
+                }
+            });
+        });
+
+        let id = generateRandomID(excludeIds);
+        this.setPicID(id);
+        return this;
+    };
+
+    this.randomPic = () => {
+        if(this.getPicID() !== -1){
+            return;
+        }
+        let id = generateRandomID();
         this.setPicID(id);
         return this;
     };
 
     this.setX(x)
         .setY(y)
-        .setPicID(-1)
-        .randomPic(true);
+        .setPicID(-1);
     return this;
 };
 
@@ -83,7 +112,9 @@ export const createField = () => {
         inner.classList.add('pic');
         cell.appendChild(inner);
 
-        cells[generateKey(x, y)] = new CellTemplate(cell, inner, x, y);
+        const newCellTemplate = new CellTemplate(cell, inner, x, y);
+        cells[generateKey(x, y)] = newCellTemplate;
+        newCellTemplate.firstRandomPic();
     });
 
     return {
